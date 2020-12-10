@@ -44,16 +44,13 @@ Route::group(['prefix'=>'/', 'middleware'=>'CheckLogin'], function(){
 
     //=============== Create + Store ==============================================
 
-    Route::get('/create_monan/{steps}', 'CTNAController@create_monan')->name('CTNA.create_monan');
+    Route::get('/create_monan', 'CTNAController@create_monan')->name('CTNA.create_monan');
 
     Route::get('/create_danhmuc', 'CTNAController@create_danhmuc')->name('CTNA.create_danhmuc');
 
     Route::get('/create_taikhoan', 'CTNAController@create_taikhoan')->name('CTNA.create_taikhoan');
 
-    Route::post('/store_monan/{count}', 'CTNAController@store_MonAn')->name('CTNA.store_monan');
-
-
-    Route::get('/addStep/{steps}', 'CTNAController@addStep')->name('CTNA.addStep');
+    Route::post('/store_monan', 'CTNAController@store_MonAn')->name('CTNA.store_monan');
 });
 
 

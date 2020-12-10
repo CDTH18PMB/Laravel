@@ -57,16 +57,10 @@ class CTNAController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function create_monan($steps)
+    public function create_monan()
     {
         $dsDanhMuc = DanhMuc::all();
-        return view('create_monan', ['dsDanhMuc'=>$dsDanhMuc, 'steps'=>$steps]);
-    }
-
-    public function addStep($steps)
-    {
-        $dsDanhMuc = DanhMuc::all();
-        return redirect()->route('CTNA.create_monan', ['dsDanhMuc'=>$dsDanhMuc, 'steps'=>$steps]);
+        return view('create_monan', ['dsDanhMuc'=>$dsDanhMuc]);
     }
 
     public function create_danhmuc()
@@ -84,7 +78,7 @@ class CTNAController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store_MonAn(Request $request, $steps)
+    public function store_MonAn(Request $request)
     {
         //$request: lấy thuộc tính name từ các thẻ input trong form
         $TenMon = $request->TenMon;
@@ -113,22 +107,8 @@ class CTNAController extends Controller
             'TrangThai'=>$TrangThai
         ]);
 
-        $loop = $steps;
-        $mamon = MonAn::count();
-        for($i = 1; $i <= $loop; $i++)
-        {
-            $BuocLam = $request->input('Buoc_'.$i);
-            
-            $insert_huongdan = HuongDan::create([
-                'MaMon'=>$mamon,
-                'CacBuocLam'=>$BuocLam,
-                'HinhAnh'=>'hinhanh.jpg'
-            ]);
-        }
-        
-
         $dsMonAn = MonAn::all();
-        return redirect()->route('CTNA.index',['dsMonAn'=>$dsMonAn]);
+        return redirect('/')->route('CTNA.index',['dsMonAn'=>$dsMonAn]);
     }
 
     //=============================================================================================================
@@ -141,15 +121,29 @@ class CTNAController extends Controller
      */
     public function show_MonAn($id)
     {
+        // load món ăn theo id
         $chitiet_monan = MonAn::where('MaMon', '=', $id)->get();
 
+        // lấy ra tên loại món
+        $loaimon = $chitiet_monan[0]->LoaiMon;
+        $danhmuc = DanhMuc::where('MaLoai', $loaimon)->get();
+        $tenloai = $danhmuc[0]->TenLoai;
 
+        // dánh sách danh mục
         $dsDanhMuc = DanhMuc::all();
 
+        // các bước làm
         $dsHuongDan = HuongDan::where('MaMon', '=', $id)->get();
 
-        return view('chitiet_monan',['chitiet_monan'=>$chitiet_monan, 'dsDanhMuc'=>$dsDanhMuc,
-                                    'dsHuongDan'=>$dsHuongDan]);
+        $arr = [
+            'chitiet_monan'=>$chitiet_monan,
+            'dsDanhMuc'=>$dsDanhMuc,
+            'dsHuongDan'=>$dsHuongDan,
+            'loaimon'=>$loaimon,
+            'tenloai'=>$tenloai,
+        ];
+
+        return view('chitiet_monan',$arr);
     }
 
     public function show_TaiKhoan($id)

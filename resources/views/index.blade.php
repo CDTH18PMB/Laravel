@@ -4,7 +4,7 @@
 
 @section('content')
 <div style='margin: 0 0 10px 20px'>
-    <a href="{{route('CTNA.create_monan',['steps'=>1])}}"><button class='btn btn-primary'>Thêm</button></a>
+    <a href="{{route('CTNA.create_monan')}}"><button class='btn btn-primary'>Thêm</button></a>
 </div>
 
 <div class='form-create'>

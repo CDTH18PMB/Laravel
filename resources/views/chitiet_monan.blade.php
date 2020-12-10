@@ -70,6 +70,8 @@
                         <div class='form-group'>
                             <label for="LoaiMon">Loại món</label>
                             <select name="LoaiMon" class='form-control'>
+                            
+                                <option value="{{$loaimon}}">{{$tenloai}}</option>
 
                                 @foreach($dsDanhMuc as $key)
                                 <option value="{{$key->MaLoai}}">{{$key->TenLoai}}</option>

@@ -5,7 +5,7 @@
 
 @section('content')
 <a href="{{route('CTNA.index')}}"><button class='btn btn-dark' style='margin:0 0 15px 20px'>Quay lại</button></a>
-<form action="{{route('CTNA.store_monan',['steps'=>$steps])}}" method='POST'>
+<form action="{{route('CTNA.store_monan')}}" method='POST'>
     @csrf
     <div class='form-create'>
         <div class='row'>
@@ -60,7 +60,7 @@
             <div class='col-sm-4'>                                
                 <div class='form-group'>
                     <label for="img_Create_MonAn">Ảnh đại diện</label>
-                    <img src="../images/bg-title-01.jpg" alt="Ảnh đại diện" id='img_Create_MonAn' name='img_Create_MonAn' style='width: 100%; height: 250px'>
+                    <img src="../images/No-image.jpg" alt="Ảnh đại diện" id='img_Create_MonAn' name='img_Create_MonAn' style='width: 100%; height: 250px'>
                     <span class='btn btn-outline-dark btn-file'>
                         <input type="file" class='form-control' name='inp_Create_MonAn' id='inp_Create_MonAn'>Chọn hình
                     </span>
@@ -69,9 +69,10 @@
         </div>
 
         <h4>Các bước thực hiện</h4>
+        <input type="text" id="count" value="1" hidden>
         <div class='hr'></div>
 
-        @for($i = 1; $i <= $steps; $i++)
+        @for($i = 1; $i <= 1; $i++)
             <div class='row' style='margin-bottom:25px'>
                 <div class='col-sm-4'>
                     <img src="../images/No-image.jpg" alt="hình ảnh" id='img_Buoc_{{$i}}' style='width: 100%; height: 240px'>
@@ -82,7 +83,7 @@
                 </div>
             </div>  
         @endfor 
-        <a href="{{route('CTNA.addStep', ['steps'=>$steps+1])}}"><button type='button' class='btn btn-primary'>Thêm bước</button></a>
+        <button type='button' class='btn btn-primary'>Thêm bước</button>
         <div class='hr'></div>
         <button type='submit' class='btn btn-primary' style='width: 100%'>Thêm</button>
     </div>
