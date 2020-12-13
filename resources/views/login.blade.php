@@ -30,7 +30,7 @@ Author URL: http://w3layouts.com
         <div class="container">
                 @if(session('status'))
                 <div class="alert alert-danger alert-dismissible fade show" style='margin:20px 0; margin:auto; width:400px'>
-                    <strong>Username or Password is incorrect</strong>
+                    <strong>{{session('status')}}</strong>
                 </div>
                 @endif
             <div class="forms-grid">

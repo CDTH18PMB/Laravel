@@ -40,17 +40,24 @@ Route::group(['prefix'=>'/', 'middleware'=>'CheckLogin'], function(){
 
     //========================= Delete ======================================================
 
-    Route::get('/destroy/{id}', 'CTNAController@destroy_monan')->name('CTNA.destroy_monan');
+    Route::get('/delete/{id}', 'CTNAController@delete')->name('CTNA.delete');
+
+    Route::get('/restore/{id}', 'CTNAController@restore')->name('CTNA.restore');
 
     //=============== Create + Store ==============================================
 
     Route::get('/create_monan', 'CTNAController@create_monan')->name('CTNA.create_monan');
+    Route::get('/addStep', 'CTNAController@addStep')->name('CTNA.addStep');
 
     Route::get('/create_danhmuc', 'CTNAController@create_danhmuc')->name('CTNA.create_danhmuc');
 
     Route::get('/create_taikhoan', 'CTNAController@create_taikhoan')->name('CTNA.create_taikhoan');
 
     Route::post('/store_monan', 'CTNAController@store_MonAn')->name('CTNA.store_monan');
+
+    //=================================== Lọc + Sắp xếp ========================================
+
+    Route::get('/filter_monan', 'CTNAController@filter_monan')->name('CTNA.filter_monan');
 });
 
 
