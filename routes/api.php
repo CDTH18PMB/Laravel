@@ -16,3 +16,9 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+// Route::get('/TaiKhoan','CTNAController@APITaiKhoan')->name('API.TaiKhoan');
+// Route::get('/TaiKhoan/{id}','CTNAController@store_apitaikhoan')->name('API1.TaiKhoan');
+
+// Route::post('/TaiKhoan1','CTNAController@APITaiKhoan1')->name('API2.TaiKhoan');
+
+// Route::get('/MonAn','CTNAController@APIMonAn')->name('API.MonAn');

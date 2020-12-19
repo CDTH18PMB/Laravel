@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
+
 use App\MonAn;
 use App\HuongDan;
 use App\DanhMuc;
@@ -19,9 +20,40 @@ class CTNAController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    // public function APITaiKhoan(){
+    //     $dsTaiKhoan = TaiKhoan::all();//lấy all dữ liệu trong model
+    //     return response()->json($dsTaiKhoan);
 
+    // }
 
+    // public function store_apitaikhoan($id){
+    //     $dsTaiKhoan1 = TaiKhoan::where('username','=',$id)->get();
+    //     return response()->json($dsTaiKhoan1,201);
+    // }
+    
+    // public function APITaiKhoan1(Request $request){
+        
+    //     $LoaiTK = 'User';
+    //     $TrangThai = 1;
 
+    //     $insert_monan = MonAn::create([
+    //         'username'=>$request->username,
+    //         'AnhDaiDien'=>$request->AnhDaiDien,
+    //         'password'=>$request->password,
+    //         'HoTen'=>$request->HoTen,
+    //         'SDT'=>$request->SDT,
+    //         'Email'=>$request->Email,
+    //         'LoaiTK'=>$LoaiTK,
+    //         'TrangThai'=>$TrangThai
+    //     ]);
+    //     return response()->json($insert_monan);
+
+    // }
+    // public function APIMonAn(){
+    //     $dsMonAn1 = MonAn::all();//lấy all dữ liệu trong model
+    //     return response()->json($dsMonAn1);
+
+    // }
     /*============================================================================================================================ */
     public function index()
     {
@@ -34,16 +66,24 @@ class CTNAController extends Controller
         $dsDanhMuc = DanhMuc::all();
         return view('danhmuc', ['dsDanhMuc'=>$dsDanhMuc]);
     }
-
+    //Lấy dữ liệu bảng món ăn
     public function duyet()
     {
-        return view('duyetcongthuc',['data'=>'data']);
+        $dsDuyetCongThuc = MonAn::all();
+        return view('duyetcongthuc',['dsDuyetCongThuc'=>$dsDuyetCongThuc]);
     }
-
+    //Lấy dữ liệu bảng bình luận
     public function binhluan()
     {
-        return view('binhluan', ['data'=>'data']);
+        $dsBinhLuan = BinhLuan::all();
+        return view('binhluan', ['dsBinhLuan'=>$dsBinhLuan]);
     }
+
+    
+
+
+
+
 
     public function taikhoan()
     {
@@ -208,7 +248,29 @@ class CTNAController extends Controller
         $dsMonAn = DB::table('MonAn')->get();
         return redirect()->route('CTNA.index',['dsMonAn'=>$dsMonAn]);
     }
+    //Duyệt bình luận
+    public function allow_comment(Request $request){
+        $data = $request->all();
+        $dsBinhLuan = BinhLuan::where('MaMon',$data['MaMon'])->update(['TrangThai'=>1]);
 
+    }
+    //Xoá bình luận
+    public function delete_comment(Request $request){
+        $data = $request->all();
+        $dsBinhLuan = BinhLuan::where('MaMon',$data['MaMon'])->delete(['TrangThai']);
+
+    }
+    //Duyệt Công thức
+    public function allow_cook(Request $request){
+        $data = $request->all();
+        $dsDuyetCongThuc = MonAn::where('MaMon',$data['MaMon'])->update(['TrangThai'=>1]);
+    }
+    //Xoá công thức
+    public function delete_cook(Request $request){
+        $data = $request->all();
+        $dsDuyetCongThuc = MonAn::where('MaMon',$data['MaMon'])->delete(['TrangThai']);
+
+    }
     /**
      * Remove the specified resource from storage.
      *
@@ -221,5 +283,31 @@ class CTNAController extends Controller
 
         $dsMonAn = DB::table('MonAn')->get();
         return redirect()->route('CTNA.index',['dsMonAn'=>$dsMonAn]);
+    }
+    //tìm kiếm
+    public function getSearch(Request $request)
+    {
+        
+        return view('chitiet_monan');
+    }
+    function getSearchAjax(Request $request)
+    {
+        if($request->get('query'))
+        {
+            $query = $request->get('query');
+            $data = DB::table('MonAn')
+            ->where('TenMon', 'LIKE', "%{$query}%")//truy vấn lấy tên món ăn
+            ->get();
+            $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
+            foreach($data as $row)
+            {
+               $output .= '
+               <li><a href="/MonAn/'. $row->MaMon .'">'.$row->TenMon.'</a></li> 
+               ';
+           } 
+           //url-> tương đương route CTNA.show_monan
+           $output .= '</ul>';
+           echo $output;
+       }
     }
 }
