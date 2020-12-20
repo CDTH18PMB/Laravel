@@ -39,12 +39,16 @@ Route::group(['prefix'=>'/', 'middleware'=>'CheckLogin'], function(){
     //========================= Update ======================================================
 
     Route::post('/MonAn/Update/{id}', 'CTNAController@update_monan')->name('CTNA.update_monan');
+    //sua dm
+    Route::get('/DanhMuc/Update/{id}', 'CTNAController@show_DanhMuc')->name('CTNA.show_danhmuc');
+    Route::post('/DanhMuc/Update/{id}', 'CTNAController@show_update_DanhMuc')->name('CTNA.show_update_danhmuc');
 
 
     //========================= Delete ======================================================
 
     Route::get('/destroy/{id}', 'CTNAController@destroy_monan')->name('CTNA.destroy_monan');
-
+    //xoa dm
+    Route::get('/destroyDM/{id}', 'CTNAController@destroy_danhmuc')->name('CTNA.destroy_danhmuc');
 
     //=============== Create + Store ==============================================
 
@@ -74,6 +78,10 @@ Route::group(['prefix'=>'/', 'middleware'=>'CheckLogin'], function(){
     Route::get('search', 'CTNAController@getSearch')->name('CTNA.getSearch');
 
     Route::post('search/name', 'CTNAController@getSearchAjax')->name('search');
+    //create danh muc
+    Route::post('/store_danhmuc', 'CTNAController@store_DanhMuc')->name('CTNA.store_danhmuc');
+    //tim kiem dm
+    Route::get('timkiem','CTNAController@TimKiem')->name('CTNA.timkiem');
 });
 
 

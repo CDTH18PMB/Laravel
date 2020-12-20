@@ -78,7 +78,18 @@ class CTNAController extends Controller
         $dsBinhLuan = BinhLuan::all();
         return view('binhluan', ['dsBinhLuan'=>$dsBinhLuan]);
     }
-
+ //api dm
+ public function APIDanhMuc(Request $request)
+ {
+     $danhmuc=DanhMuc::all();
+     return response()->json($danhmuc);
+ }
+ public function store(Request $request,$id)
+ {
+     $danhmuc=DanhMuc::where('MaLoai','=',$id)->get();
+     return response()->json($danhmuc,201);
+    
+ }
     
 
 
@@ -170,7 +181,37 @@ class CTNAController extends Controller
         $dsMonAn = MonAn::all();
         return redirect()->route('CTNA.index',['dsMonAn'=>$dsMonAn]);
     }
+//store_DanhMuc
+public function store_DanhMuc(Request $request)
+{
+    $TenLoai = $request->TenLoai;
+    $TrangThai = 1;
 
+
+    DB::table('DanhMuc')->insert([
+        'TenLoai'=>$TenLoai,
+        'TrangThai'=>$TrangThai,
+        
+    ]);
+
+    $dsDanhMuc = DanhMuc::all();
+    return view('danhmuc',['dsDanhMuc'=>$dsDanhMuc]);
+}
+//sua danh muc
+public function show_update_DanhMuc(Request $request,$id)
+{
+    $TenLoai = $request->TenLoai;
+    $TrangThai = 1;
+
+
+    DanhMuc::where('MaLoai', '=', $id)->update([
+        'TenLoai'=>$TenLoai,
+        'TrangThai'=>$TrangThai
+    ]);
+    $dsDanhMuc = DB::table('DanhMuc')->get();
+    return redirect()->route('CTNA.danhmuc',['dsDanhMuc'=>$dsDanhMuc]);
+    
+}
     //=============================================================================================================
 
     /**
@@ -198,7 +239,12 @@ class CTNAController extends Controller
         
         return view('chitiet_taikhoan', ['chitiet_taikhoan'=>$chitiet_taikhoan]);
     }
-
+    public function show_DanhMuc($id)
+    {
+        $chitiet_danhmuc = DanhMuc::where('MaLoai', '=', $id)->get();
+        
+        return view('chitiet_danhmuc', ['chitiet_danhmuc'=>$chitiet_danhmuc]);
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -284,6 +330,22 @@ class CTNAController extends Controller
         $dsMonAn = DB::table('MonAn')->get();
         return redirect()->route('CTNA.index',['dsMonAn'=>$dsMonAn]);
     }
+      //xoa danh muc
+      public function destroy_DanhMuc($id)
+      {
+          DB::table('DanhMuc')->where('MaLoai',$id)->update(['TrangThai'=>0]);
+  
+          $dsDanhMuc = DB::table('DanhMuc')->get();
+          return redirect()->route('CTNA.danhmuc',['dsDanhMuc'=>$dsDanhMuc]);
+      }
+
+      //tim kiem danh muc
+    public function TimKiem(Request $request){
+        $dsDanhMuc=DanhMuc::where('TenLoai','like','%'.$request->key.'%')
+        ->where('TrangThai',1)->get();
+         return view('search',compact('dsDanhMuc'));
+    }
+
     //tìm kiếm
     public function getSearch(Request $request)
     {
