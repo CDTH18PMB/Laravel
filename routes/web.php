@@ -70,5 +70,7 @@ Route::get('/login', 'AuthLoginController@getLogin')->name('Auth.getLogin');
 Route::post('login', 'AuthLoginController@postLogin')->name('Auth.postLogin');
 Route::get('/logout', 'AuthLoginController@getLogout')->name('Auth.getLogout');
 
+Route::get('/CheckLogin', 'CTNAController@CheckLogin')->name('CTNA.CheckLogin');
+
 
 

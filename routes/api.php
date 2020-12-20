@@ -19,4 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/MonAn', 'APIController@index')->name('API.MonAn');
 
-Route::get('DanhMuc', 'APIController@DanhMuc')->name('API.DanhMuc');
+Route::get('/DanhMuc', 'APIController@DanhMuc')->name('API.DanhMuc');
+
+Route::get('/TaiKhoan', 'APIController@TaiKhoan')->name('API.TaiKhoan');
+

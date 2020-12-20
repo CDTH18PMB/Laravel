@@ -30,6 +30,12 @@ class APIController extends Controller
         return response()->json($dsDanhMuc);
     }
 
+    public function TaiKhoan()
+    {
+        $dsTaiKhoan = ['TaiKhoan'=>TaiKhoan::all()];
+        return response()->json($dsTaiKhoan);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -95,4 +101,8 @@ class APIController extends Controller
     {
         //
     }
+
+    //==================================================================================================
+
+    
 }

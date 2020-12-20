@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use File;
 use Storage;
@@ -27,13 +28,13 @@ class CTNAController extends Controller
     /*============================================================================================================================ */
     public function index()
     {
-        $dsMonAn = MonAn::all();
+        $dsMonAn = MonAn::paginate(10);
         $dsDanhMuc = DanhMuc::all();
         $arr = [
             'dsMonAn'=>$dsMonAn,
             'dsDanhMuc'=>$dsDanhMuc,
         ];
-        return view('index',$arr);
+        return view('index')->with($arr);
     }
 
     public function danhmuc()
@@ -375,5 +376,26 @@ class CTNAController extends Controller
     public function filter_monan()
     {
 
+    }
+
+    public function CheckLogin()
+    {
+        // $username = $request->username;
+        // $password = $request->password;
+
+        // $data = [
+        //     'username'=>$username,
+        //     'password'=>$password,
+        // ];
+
+        // if(Auth::attempt($data))
+        // {
+        //     return 'success';
+        // }
+        // else
+        // {
+        //     return 'false';
+        // }
+        return 'success';
     }
 }
