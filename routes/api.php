@@ -22,3 +22,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 // Route::post('/TaiKhoan1','CTNAController@APITaiKhoan1')->name('API2.TaiKhoan');
 
 // Route::get('/MonAn','CTNAController@APIMonAn')->name('API.MonAn');
+//Route::get('/DanhMuc','CTNAController@APIDanhMuc')->name('API.DanhMuc');
+//Route::get('/DanhMuc1/{id}','CTNAController@store')->name('store.DanhMuc');
