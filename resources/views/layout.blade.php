@@ -50,23 +50,22 @@
                                 <div class="account-wrap">
                                     <div class="account-item clearfix js-item-menu">
                                         <div class="image">
-                                            <img src="@yield('url')images/icon/avatar-01.jpg" alt="John Doe" />
+                                            <img src="@yield('url')images/avatar/{{session('name')}}.jpg" alt="Avatar"/>
                                         </div>
                                         <div class="content">
-                                            <a class="js-acc-btn" href="#">John Doe</a>
+                                            <a class="js-acc-btn" href="#">{{session('name')}}</a>
                                         </div>
                                         <div class="account-dropdown js-dropdown">
                                             <div class="info clearfix">
                                                 <div class="image">
                                                     <a href="#">
-                                                        <img src="@yield('url')images/icon/avatar-01.jpg" alt="John Doe" />
+                                                        <img src="@yield('url')images/avatar/{{session('name')}}.jpg" alt="Avatar"/>
                                                     </a>
                                                 </div>
                                                 <div class="content">
                                                     <h5 class="name">
-                                                        <a href="#">john doe</a>
+                                                        <a href="#">{{session('name')}}</a>
                                                     </h5>
-                                                    <span class="email">johndoe@example.com</span>
                                                 </div>
                                             </div>
         
@@ -125,11 +124,6 @@
         //Tài khoản
         $("#inp_Avatar").change(function() { 
             readURL(this, "#img_Avatar"); 
-        });
-        
-        //Món ăn
-        $("#inp_MonAn").change(function() { 
-            readURL(this, "#img_MonAn"); 
         });
 
         $("#inp_Create_MonAn").change(function() { 
@@ -274,7 +268,77 @@
 
     });
 
+        $("#inp_Buoc_1").change(function() { 
+            readURL(this, "#img_Buoc_1"); 
+        });
 
+        $("#inp_Buoc_2").change(function() { 
+            readURL(this, "#img_Buoc_2"); 
+        });
+
+        $("#inp_Buoc_3").change(function() { 
+            readURL(this, "#img_Buoc_3"); 
+        });
+
+        $("#inp_Buoc_4").change(function() { 
+            readURL(this, "#img_Buoc_4"); 
+        });
+
+        $("#inp_Buoc_5").change(function() { 
+            readURL(this, "#img_Buoc_5"); 
+        });
+
+        $("#inp_Buoc_6").change(function() { 
+            readURL(this, "#img_Buoc_6"); 
+        });
+
+        $("#inp_Buoc_7").change(function() { 
+            readURL(this, "#img_Buoc_7"); 
+        });
+
+        $("#inp_Buoc_8").change(function() { 
+            readURL(this, "#img_Buoc_8"); 
+        });
+
+        $("#inp_Buoc_9").change(function() { 
+            readURL(this, "#img_Buoc_9"); 
+        });
+
+        $("#inp_Buoc_10").change(function() { 
+            readURL(this, "#img_Buoc_10"); 
+        });
+    </script>
+        
+
+    <script>
+        // thêm bước mới
+        $("button#addStep").on('click', function(){
+            var count = document.forms["CreateProduct"]["count"].value; // đếm số bước hiện tại
+            if(count == 10){
+                alert('Số bước không được quá 10');
+                return false;
+            }
+            count++;
+            var url = 'http://localhost:8000/addStep'; // đường dẫn đến file xử lý thêm bước
+
+            // sử dụng ajax
+            $.ajax({
+                url: url,
+                type: 'GET',
+                cache: false,
+                data:{'count':count}, // dữ liệu sẽ truyển qua bên file xử lý
+                success: function (data){ // nếu thành công
+                    $('#HuongDan').append(data); // tạo thêm 1 bước mới bằng cách thêm vào cuối thẻ div id=HuongDan
+                    document.forms["CreateProduct"]["count"].value = count; // cập nhật lại số bước
+                    var inp = '#inp_Buoc_' + count;
+                    var img = '#img_Buoc_' + count;
+
+                    $(inp).change(function() { 
+                        readURL(this, img); 
+                    });
+                }    
+            });
+        });
     </script>
 </html>
 <!-- end document-->

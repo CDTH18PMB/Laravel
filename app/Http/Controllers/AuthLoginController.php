@@ -33,6 +33,8 @@ class AuthLoginController extends Controller
 
         if(Auth::attempt($data))
         {
+            $name = TaiKhoan::where('username', $data['username'])->get();
+            $request->session()->put('name', $name[0]->HoTen);
             return redirect('/');
         }
         else
@@ -41,9 +43,10 @@ class AuthLoginController extends Controller
         }
     }
 
-    public function getLogout()
+    public function getLogout(Request $request)
     {
         Auth::logout();
+        $request->session()->flush();
         return redirect('login');
     }
 

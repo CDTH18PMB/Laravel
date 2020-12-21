@@ -8,10 +8,15 @@
 
 
 @foreach($chitiet_monan as $chitiet)
-<a href="{{route('CTNA.destroy_monan', ['id'=>$chitiet->MaMon])}}"><button class='btn btn-danger' style='margin:0 0 15px 5px'>Xóa</button></a>
 
+<!-- Đã xóa -->
+@if($chitiet->TrangThai == 0)
+<a href="{{route('CTNA.restore', ['id'=>$chitiet->MaMon])}}"><button class='btn btn-success' style='margin:0 0 15px 5px'>Hủy xóa</button></a>
+@else
+<a href="{{route('CTNA.delete', ['id'=>$chitiet->MaMon])}}"><button class='btn btn-danger' style='margin:0 0 15px 5px'>Xóa</button></a>
+@endif
 
-<form method='POST' action="{{route('CTNA.update_monan',['id'=>$chitiet->MaMon])}}">
+<form method='POST' action="{{route('CTNA.update_monan',['id'=>$chitiet->MaMon])}}" name='CreateProduct' enctype="multipart/form-data">
     @csrf
     <div class='form-create'>
         <div class='row'>
@@ -32,7 +37,12 @@
                     <div class='col-sm-4'>
                         <div class='form-group'>
                             <label for="NguoiTao">Người tạo</label>
-                            <input type="text" class='form-control' name='NguoiTao' value='{{$chitiet->NguoiTao}}'>
+                            <select class='form-control' name="NguoiTao" id="NguoiTao">
+                                <option value="{{$chitiet->NguoiTao}}">{{$chitiet->NguoiTao}}</option>
+                                @foreach($dsTaiKhoan as $tk)
+                                <option value="{{$tk->username}}">{{$tk->username}}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -54,13 +64,13 @@
                     <div class='col-sm-6'>
                         <div class='form-group'>
                             <label for="LuotXem">Lượt xem</label>
-                            <input type="text" class='form-control' name='LuotXem' value='{{$chitiet->LuotXem}}'>
+                            <input type="number" class='form-control' min='0' name='LuotXem' value='{{$chitiet->LuotXem}}'>
                         </div>
                     </div>
                     <div class='col-sm-6'>
                         <div class='form-group'>
                             <label for="LuotThich">Lượt thích</label>
-                            <input type="text" class='form-control' name='LuotThich' value='{{$chitiet->LuotThich}}'>
+                            <input type="number" class='form-control' min='0' name='LuotThich' value='{{$chitiet->LuotThich}}'>
                         </div>
                     </div>
                 </div>
@@ -70,6 +80,8 @@
                         <div class='form-group'>
                             <label for="LoaiMon">Loại món</label>
                             <select name="LoaiMon" class='form-control'>
+                            
+                                <option value="{{$loaimon}}">{{$tenloai}}</option>
 
                                 @foreach($dsDanhMuc as $key)
                                 <option value="{{$key->MaLoai}}">{{$key->TenLoai}}</option>
@@ -83,8 +95,8 @@
             <div class='col-sm-4'>
                 <div class='form-group'>
                     <label for="AnhDaiDien">Ảnh đại diện</label>
-                    <img src="../../images/{{$chitiet->TenMon}}/anhdaidien.jpg" alt="image" id='img_MonAn' style='width: 100%; height: 250px'>
-                    <span class='btn btn-outline-dark btn-file'><input type="file" id='inp_MonAn' class='form-control' name='AnhDaiDien'>Chọn hình</span>
+                    <img src="../images/{{$chitiet->TenMon}}/anhdaidien.jpg" alt="image" id='img_Create_MonAn' name='img_Create_MonAn' style='width: 100%; height: 250px'>
+                    <span class='btn btn-outline-dark btn-file'><input type="file" name='inp_Create_MonAn' id='inp_Create_MonAn' class='form-control'>Chọn hình</span>
                 </div>
             </div>
         </div>
@@ -104,22 +116,31 @@
             </div>
         </div>
 
-        <p>Các bước thực hiện</p>
-        <div class='hr'></div>
-        @foreach($dsHuongDan as $step)
-        <div class='row' style='margin-bottom:25px'>
-            <div class='col-sm-4'>
-                <img src="../images/{{$chitiet->TenMon}}/{{$step->HinhAnh}}" alt="hình ảnh" id='image' style='width: 100%; height: 240px'>
-                <span class='btn btn-outline-dark btn-file'>Đổi hình<input type='file' id="inputIMG"></span>
-            </div>
-            <div class='col-sm-8'>
-                <textarea name="HuongDan" cols="30" rows="11" class='form-control'>{{$step->CacBuocLam}}</textarea>
-            </div> 
-        </div>
-        @endforeach
+        <p>Các bước thực hiện</p><hr>
+        <input name='count' value='{{count($dsHuongDan)}}' hidden>
+
         
-        <div class='hr'></div>
-        <button class='btn btn-primary' style='width:100%'>Cập nhật</button>
+        <div id='HuongDan'>
+        @for($i = 1; $i <= count($dsHuongDan); $i++)
+            <div id='div_buoc_{{$i}}' class='row' style='margin-bottom:25px'>
+                <div class='col-sm-4'>
+                    <img src="../images/{{$chitiet->TenMon}}/{{$dsHuongDan[$i-1]->HinhAnh}}" alt="hình ảnh" id='img_Buoc_{{$i}}' style='width: 100%; height: 240px'>
+                    <span class='btn btn-outline-dark btn-file'>Đổi hình<input type='file' id="inp_Buoc_{{$i}}" name='inp_Buoc_{{$i}}'></span>
+                </div>
+                <div class='col-sm-8'>
+                    <textarea id='Buoc_{{$i}}' name='Buoc_{{$i}}' cols="30" rows="11" class='form-control'>{{$dsHuongDan[$i-1]->CacBuocLam}}</textarea>
+                </div> 
+            </div>
+        @endfor
+        </div>
+
+        @if($chitiet->TrangThai == 1)
+        <center>
+            <button type='button' class='btn btn-warning' id="addStep" style='border-radius:10px; width:40%; margin-top:20px'>Thêm bước</button>
+        </center>
+        <hr>
+        <button type='submit' class='btn btn-primary' style='width:100%'>Cập nhật</button>
+        @endif
         @endforeach
     </div>
 </form>

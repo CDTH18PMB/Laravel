@@ -38,16 +38,28 @@ Route::group(['prefix'=>'/', 'middleware'=>'CheckLogin'], function(){
 
     //========================= Delete ======================================================
 
+    Route::get('/delete/{id}', 'CTNAController@delete')->name('CTNA.delete');
+
+    Route::get('/restore/{id}', 'CTNAController@restore')->name('CTNA.restore');
+
     Route::get('/destroy/{id}', 'CTNAController@destroy_monan')->name('CTNA.destroy_monan');
     //xoa dm
     Route::get('/destroyDM/{id}', 'CTNAController@destroy_danhmuc')->name('CTNA.destroy_danhmuc');
 
     //=============== Create + Store ==============================================
 
-    Route::get('/create_monan/{steps}', 'CTNAController@create_monan')->name('CTNA.create_monan');
+    Route::get('/create_monan', 'CTNAController@create_monan')->name('CTNA.create_monan');
+    Route::get('/addStep', 'CTNAController@addStep')->name('CTNA.addStep');
 
     Route::get('/create_danhmuc', 'CTNAController@create_danhmuc')->name('CTNA.create_danhmuc');
 
+    Route::get('/create_taikhoan', 'CTNAController@create_taikhoan')->name('CTNA.create_taikhoan');
+
+    Route::post('/store_monan', 'CTNAController@store_MonAn')->name('CTNA.store_monan');
+
+    //=================================== Lọc + Sắp xếp ========================================
+
+    Route::get('/filter_monan', 'CTNAController@filter_monan')->name('CTNA.filter_monan');
     Route::post('/store_monan/{count}', 'CTNAController@store_MonAn')->name('CTNA.store_monan');
 
     //Duyệt bình luận
@@ -68,6 +80,7 @@ Route::group(['prefix'=>'/', 'middleware'=>'CheckLogin'], function(){
     Route::get('search', 'CTNAController@getSearch')->name('CTNA.getSearch');
 
     Route::post('search/name', 'CTNAController@getSearchAjax')->name('search');
+
     //create danh muc
     Route::post('/store_danhmuc', 'CTNAController@store_DanhMuc')->name('CTNA.store_danhmuc');
     //tim kiem dm
@@ -104,6 +117,8 @@ Route::group(['prefix'=>'/', 'middleware'=>'CheckLogin'], function(){
 Route::get('/login', 'AuthLoginController@getLogin')->name('Auth.getLogin');
 Route::post('login', 'AuthLoginController@postLogin')->name('Auth.postLogin');
 Route::get('/logout', 'AuthLoginController@getLogout')->name('Auth.getLogout');
+
+Route::get('/CheckLogin', 'CTNAController@CheckLogin')->name('CTNA.CheckLogin');
 
 
 
