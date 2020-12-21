@@ -22,4 +22,8 @@ class MonAn extends Model
     {
         return $this->hasOne('DanhMuc','LoaiMon','MaLoai');
     }
+
+    public function BinhLuan(){
+       return $this->hasMany('App\BinhLuan');
+                            } 
 }

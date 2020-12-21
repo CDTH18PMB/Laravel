@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Seeder;
 
-
 class TaiKhoan extends Seeder
 {
     /**
@@ -57,4 +56,5 @@ class TaiKhoan extends Seeder
         
         $insert = DB::table('TaiKhoan')->insert($data);
     }
-}
+    }
+

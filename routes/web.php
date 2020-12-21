@@ -19,15 +19,18 @@ Route::group(['prefix'=>'/', 'middleware'=>'CheckLogin'], function(){
 
     Route::get('/danhmuc', 'CTNAController@danhmuc')->name('CTNA.danhmuc');
 
+    //Duyệt công thức
     Route::get('/duyetcongthuc', 'CTNAController@duyet')->name('CTNA.duyet');
-    
+
+    // Bình Luận
     Route::get('/binhluan', 'CTNAController@binhluan')->name('CTNA.binhluan');
+    
     
     Route::get('/taikhoan', 'CTNAController@taikhoan')->name('CTNA.taikhoan');
 
     
     //============= Chi tiết ======================================================
-
+    
     Route::get('/MonAn/{id}', 'CTNAController@show_monan')->name('CTNA.show_monan');
 
     Route::get('/taikhoan/{id}', 'CTNAController@show_taikhoan')->name('CTNA.show_taikhoan');
@@ -44,6 +47,7 @@ Route::group(['prefix'=>'/', 'middleware'=>'CheckLogin'], function(){
 
     Route::get('/restore/{id}', 'CTNAController@restore')->name('CTNA.restore');
 
+
     //=============== Create + Store ==============================================
 
     Route::get('/create_monan', 'CTNAController@create_monan')->name('CTNA.create_monan');
@@ -58,6 +62,26 @@ Route::group(['prefix'=>'/', 'middleware'=>'CheckLogin'], function(){
     //=================================== Lọc + Sắp xếp ========================================
 
     Route::get('/filter_monan', 'CTNAController@filter_monan')->name('CTNA.filter_monan');
+
+    //Duyệt bình luận
+    Route::post('/allow-comment','CTNAController@allow_comment');
+
+    //Xoá bình luận
+    Route::delete('/delete-comment','CTNAController@delete_comment');
+
+    //Duyệt công thức
+    Route::post('/allow-cook','CTNAController@allow_cook');
+
+    //Xoá công thức
+    Route::delete('/delete-cook','CTNAController@delete_cook');
+
+    Route::get('/addStep/{steps}', 'CTNAController@addStep')->name('CTNA.addStep');
+
+    //Tìm kiếm
+    Route::get('search', 'CTNAController@getSearch')->name('CTNA.getSearch');
+
+    Route::post('search/name', 'CTNAController@getSearchAjax')->name('search');
+
 });
 
 

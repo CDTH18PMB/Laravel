@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Auth;
 
 use App\MonAn;
 use App\HuongDan;
@@ -26,7 +27,7 @@ class APIController extends Controller
 
     public function DanhMuc()
     {
-        $dsDanhMuc = DanhMuc::all();
+        $dsDanhMuc = ['DanhMuc'=>DanhMuc::all()];
         return response()->json($dsDanhMuc);
     }
 
@@ -36,73 +37,60 @@ class APIController extends Controller
         return response()->json($dsTaiKhoan);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
     //==================================================================================================
 
-    
+    // api kiểm tra đăng nhập
+    public function CheckLogin()
+    {
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        $data = ['username'=>$username, 'password'=>$password, 'TrangThai'=>1];
+        if(Auth::attempt($data))
+        {
+            $dsTaiKhoan = ['TaiKhoan'=>TaiKhoan::where('username', $username)->get()];
+            return response()->json($dsTaiKhoan);
+        }
+        else
+        {
+            return 'false';
+        }
+    }
+
+    // api tạo công thức mới
+    public function Create_MonAn()
+    {
+        $tenmon = $_POST['TenMon'];
+        $anhdaidien = $_POST['AnhDaiDien'];
+        $mota = $_POST['MoTa'];
+        $dokho = $_POST['DoKho'];
+        $thoigiannau = $_POST['ThoiGianNau'];
+        $nguyenlieu = $_POST['NguyenLieu'];
+        $luotxem = $_POST['LuotXem'];
+        $luotthich = $_POST['LuotThich'];
+        $nguoitao = $_POST['NguoiTao'];
+        $loaimon = $_POST['LoaiMon'];
+        $trangthai = $_POST['TrangThai'];
+
+        $data = [
+            'TenMon'=>$tenmon,
+            'AnhDaiDien'=>$anhdaidien,
+            'MoTa'=>$mota,
+            'DoKho'=>$dokho,
+            'ThoiGianNau'=>$thoigiannau,
+            'NguyenLieu'=>$nguyenlieu,
+            'LuotXem'=>$luotxem,
+            'LuotThich'=>$luotthich,
+            'NguoiTao'=>$nguoitao,
+            'LoaiMon'=>$loaimon,
+            'TrangThai'=>$trangthai,
+        ];
+
+        $insert = MonAn::create($data);
+
+        if($insert)
+        {
+            return 'success';
+        }
+        return 'fail';
+    }
 }

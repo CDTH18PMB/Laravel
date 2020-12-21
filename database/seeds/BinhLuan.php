@@ -11,6 +11,6 @@ class BinhLuan extends Seeder
      */
     public function run()
     {
-        //
     }
+    
 }
