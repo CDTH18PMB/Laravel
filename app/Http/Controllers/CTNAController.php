@@ -96,12 +96,6 @@ class CTNAController extends Controller
 
 
 
-    public function taikhoan()
-    {
-        $dsTaiKhoan = TaiKhoan::all();
-        return view('TaiKhoan', ['dsTaiKhoan'=>$dsTaiKhoan]);
-    }
-
     /**========================================================================================================================
      * Show the form for creating a new resource.
      *
@@ -125,10 +119,6 @@ class CTNAController extends Controller
         return view('create_danhmuc');
     }
 
-    public function create_taikhoan()
-    {
-        return view('create_taikhoan');
-    }
     /**
      * Store a newly created resource in storage.
      *
@@ -233,12 +223,6 @@ public function show_update_DanhMuc(Request $request,$id)
                                     'dsHuongDan'=>$dsHuongDan]);
     }
 
-    public function show_TaiKhoan($id)
-    {
-        $chitiet_taikhoan = TaiKhoan::where('Username', '=', $id)->get();
-        
-        return view('chitiet_taikhoan', ['chitiet_taikhoan'=>$chitiet_taikhoan]);
-    }
     public function show_DanhMuc($id)
     {
         $chitiet_danhmuc = DanhMuc::where('MaLoai', '=', $id)->get();
@@ -372,4 +356,192 @@ public function show_update_DanhMuc(Request $request,$id)
            echo $output;
        }
     }
+
+// Controller tài khoản ---------------------------------------------------------------------------
+
+    // index tài khoản
+    public function taikhoan()
+    {
+        $dsTaiKhoan = TaiKhoan::all();
+
+        return view('TaiKhoan', ['dsTaiKhoan'=>$dsTaiKhoan]);
+    }
+
+    // store tài khoản
+    public function create_taikhoan()
+    {
+        return view('create_taikhoan');
+    }
+
+    // xử lý thêm
+    public function store_TaiKhoan(Request $request)
+    {
+        //Validation
+        $request->validate([
+            'HoTen'     => 'max:50',
+            'SDT'       => 'digits:10',
+            'Email'     => 'max:100',
+            'Username'  => 'max:255',
+            'Password'  => 'max:255',
+            'inp_Avatar'=> 'mimes:jpg,jpeg,png,gif|max:2048'
+        ],
+        [
+            'HoTen.max'         => 'Họ tên không được có hơn 50 ký tự',
+            'SDT.digits'        => 'Số điện thoại phải là chữ số với 10 ký tự',
+            'Email.max'         => 'Email không được có hơn 100 ký tự',
+            'Username.max'      => 'Tài khoản không được có hơn 255 ký tự',
+            'Password.max'      => 'Mật khẩu không được có hơn 255 ký tự',
+            'inp_Avatar.mimes'  => 'Tệp ảnh phải có đuôi là .jpg .jpeg .png .gif',
+            'inp_Avatar.max'    => 'Tệp ảnh không được lớn hơn 2048 kilobytes'
+        ]);
+
+        //lấy giá trị
+        $Username   = $request->Username;
+        $LoaiTK     = 'User';
+        $TrangThai  = 1;
+
+        // Xử lý file
+        if($request->hasFile('inp_Avatar')){
+            // lấy ra
+            $file       = $request->inp_Avatar;
+            $extension  = $file->extension();
+            $path       = 'images/Avatar/';
+            $AnhDaiDien = $Username.'.'.$extension;
+            // lưu file
+            $file->move($path,$AnhDaiDien);
+        }
+
+        //insert vào bảng tài khoản
+        $Insert_taikhoan = DB::table('taikhoan')->insert([
+            'Username'  => $Username,
+            'AnhDaiDien'=> $AnhDaiDien,
+            'Password'  => bcrypt($request->Password),
+            'HoTen'     => $request->HoTen,
+            'SDT'       => $request->SDT,
+            'Email'     => $request->Email,
+            'LoaiTK'    => $LoaiTK,
+            'TrangThai' => $TrangThai
+        ]);
+
+        //chuyển về trang chi tiết
+        return redirect()->route('CTNA.show_taikhoan', ['id'=>$Username])->with('thong_diep', 'Thêm tài khoản thành công');
+    }
+
+    //detail tài khoản
+    public function show_TaiKhoan($id)
+    {
+        $chitiet_taikhoan   = TaiKhoan::where('Username', '=', $id)->get();
+        $mondatao_taikhoan  = MonAn::where('NguoiTao', '=', $id)->get();
+        $mondathich_taikhoan= MonAnDaThich::where('Username', '=', $id)->get();
+        
+        return view('chitiet_taikhoan', ['chitiet_taikhoan'=>$chitiet_taikhoan,'mondatao_taikhoan'=>$mondatao_taikhoan,'mondathich_taikhoan'=>$mondathich_taikhoan]);
+    }
+
+    // xử lý cập nhật
+    public function update_taikhoan(Request $request, $id)
+    {   
+        //Validation
+        $request->validate([
+            'MatKhau'   => 'max:255',
+            'HoTen'     => 'max:50',
+            'SDT'       => 'digits:10',
+            'Email'     => 'max:100',
+            'inp_Avatar'=> 'mimes:jpg,jpeg,png,gif|max:2048'
+        ],
+        [
+            'MatKhau.max'       => 'Mật khẩu không được có hơn 255 ký tự',
+            'HoTen.max'         => 'Họ tên không được có hơn 50 ký tự',
+            'SDT.digits'        => 'Số điện thoại phải là chữ số với 10 ký tự',
+            'Email.max'         => 'Email không được có hơn 100 ký tự',
+            'inp_Avatar.mimes'  => 'Tệp ảnh phải có đuôi là .jpg .jpeg .png .gif',
+            'inp_Avatar.max'    => 'Tệp ảnh không được lớn hơn 2048 kilobytes'
+        ]);
+
+        //lấy giá trị từ request
+        $Username   = $request->TaiKhoan;
+        // Kiểm tra file
+        if($request->hasFile('inp_Avatar'))
+        {   
+            //Xử lý file
+            $file        = $request->file('inp_Avatar');
+            $extension   = $file->extension();
+            $path        = 'images/Avatar/';
+            $AnhDaiDien  = $Username.'.'.$extension;
+            $file->move($path,$AnhDaiDien);
+            
+            //kiểm tra password
+            if($request->MatKhau == ""){
+                DB::table('taikhoan')->where('Username',$id)->update([
+                    'AnhDaiDien'    => $AnhDaiDien,
+                    'HoTen'         => $request->HoTen,
+                    'SDT'           => $request->SDT,
+                    'Email'         => $request->Email
+            ]);}
+            else{
+                DB::table('taikhoan')->where('Username',$id)->update([
+                    'AnhDaiDien'    => $AnhDaiDien,
+                    'Password'      => bcrypt($request->MatKhau),
+                    'HoTen'         => $request->HoTen,
+                    'SDT'           => $request->SDT,
+                    'Email'         => $request->Email
+            ]);}
+        }else {
+            //kiểm tra password
+            if($request->MatKhau == ""){
+                DB::table('taikhoan')->where('Username',$id)->update([
+                    'HoTen'         => $request->HoTen,
+                    'SDT'           => $request->SDT,
+                    'Email'         => $request->Email
+            ]);}
+            else{
+                DB::table('taikhoan')->where('Username',$id)->update([
+                    'Password'      => bcrypt($request->MatKhau),
+                    'HoTen'         => $request->HoTen,
+                    'SDT'           => $request->SDT,
+                    'Email'         => $request->Email
+            ]);}
+        }
+
+        //gửi thêm session
+        return redirect()->route('CTNA.show_taikhoan', ['id'=>$id])->with('thong_diep', 'Cập nhật tài khoản thành công');
+    }
+
+    // xử lý khoá
+    public function lockout_taikhoan($id)
+    {
+        //cập nhật trạng thái = 0
+        DB::table('TaiKhoan')->where('Username',$id)->update(['TrangThai'=>0]);
+
+        return response()->json(['success'=>'Khoá rồi','error'=>'lỗi rồi']);
+    }
+
+    // xử lý mở khoá
+    public function open_taikhoan($id)
+    {   
+        //cập nhật trạng thái = 1
+        DB::table('TaiKhoan')->where('Username',$id)->update(['TrangThai'=>1]);
+
+        return response()->json(['success'=>'Đã mở lạy','error'=>'lỗi rồi']);
+    }
+
+    // xử lý tìm kiếm
+    public function search_taikhoan(Request $request)
+    {
+        if($request->get('query'))
+        {
+            $query  = $request->get('query');
+            $data   = taikhoan::where('username', 'LIKE', "%{$query}%")->get();
+            $output = '<ul class="dropdown-menu" style="display:block">';
+            foreach($data as $row)
+            {
+               $output .= '<li><a href="taikhoan/'. $row->username .'">
+               <p style="color:red">TÀI KHOẢN: '.$row->username.' [ SDT: '.$row->SDT.' ]</p>
+               </a></li>';
+            }
+           $output .= '</ul>';
+           echo $output;
+       }
+    }
+// Kết thúc phần Controller tài khoản -------------------------------------------------------------
+
 }
