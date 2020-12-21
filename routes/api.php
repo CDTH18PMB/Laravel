@@ -35,3 +35,5 @@ Route::post('/Create_MonAn', 'APIController@Create_MonAn');
 
 // Route::get('/MonAn','CTNAController@APIMonAn')->name('API.MonAn');
 
+//Route::get('/DanhMuc','CTNAController@APIDanhMuc')->name('API.DanhMuc');
+//Route::get('/DanhMuc1/{id}','CTNAController@store')->name('store.DanhMuc');
