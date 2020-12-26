@@ -4,7 +4,7 @@
 
 @section('content')
 
-<div style='margin: 0 20px 10px 20px'>
+<div class='row' style='margin: 0 20px 10px 20px'>
     @if(session('create_success')) <!--thêm món ăn thành công-->
     <div class="alert alert-success alert-dismissible">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -26,42 +26,51 @@
     </div>
     @endif
 
-    <!-- Thêm mới -->
-    <a href="{{route('CTNA.create_monan')}}"><button class='btn btn-primary'>Thêm</button></a>
-    <!-- Lọc -->
-    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#filter">Lọc</button>
-    <!-- Sắp xếp -->
-    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#sort">Sắp xếp</button>
+    <div class='col-sm-4'>
+        <!-- Thêm mới -->
+        <a href="{{route('CTNA.create_monan')}}"><button class='btn btn-primary' style='margin-right:5px'>Thêm</button></a>
+        <!-- Lọc -->
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#filter" style='margin-right:5px'>Lọc</button>
+        <!-- Sắp xếp -->
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#sort" style='margin-right:5px'>Sắp xếp</button>
+    </div>
+    
+    <div class='col-sm-8'>
+        <!-- tìm kiếm -->
+        <input type="text" class='form-control' placeholder='Tìm món ăn' style='width:100%;' id='search_mon_an'>
+        <div id='SearchResult'></div>
+    </div>
+    
 
 
-    <!-- The Modal -->
+    <!-- modal bộ lọc -->
     <div class="modal fade" id="filter">
     <div class="modal-dialog">
         <div class="modal-content">
-
-        <!-- Modal Header -->
-        <div class="modal-header">
-            <h4 class="modal-title">BỘ LỌC</h4>
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-
-        <!-- Modal body -->
-        <div class="modal-body">
-            <div class=form-group>
-            <label for="filter">Loại món</label>
-            <select class='form-control' name="filter" id="filter">
-            @foreach($dsDanhMuc as $ds)
-            <option value="{{$ds->MaLoai}}">{{$ds->TenLoai}}</option>
-            @endforeach
-            </select>
+        <form name="FilterForm">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">BỘ LỌC</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
-        </div>
 
-        <!-- Modal footer -->
-        <div class="modal-footer">
-            <a href="{{route('CTNA.filter_monan')}}"><button type='button' class='btn btn-success'>Lọc</button></a>
-        </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class=form-group>
+                    <label for="filter">Loại món</label>
+                    <select class='form-control' name="filter" id="filter">
+                        @foreach($dsDanhMuc as $ds)
+                        <option value="{{$ds->MaLoai}}">{{$ds->TenLoai}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
 
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type='button' class='btn btn-success'>Lọc</button>
+            </div>
+        </form>
         </div>
     </div>
     </div>

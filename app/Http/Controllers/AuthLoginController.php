@@ -34,7 +34,8 @@ class AuthLoginController extends Controller
         if(Auth::attempt($data))
         {
             $name = TaiKhoan::where('username', $data['username'])->get();
-            $request->session()->put('name', $name[0]->HoTen);
+            $request->session()->push('name', $name[0]->AnhDaiDien);
+            $request->session()->push('name', $name[0]->HoTen);
             return redirect('/');
         }
         else
