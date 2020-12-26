@@ -88,7 +88,7 @@
             <div class='col-sm-4'>
                 <div class='form-group'>
                     <label for="img_Avatar">Ảnh đại diện</label>
-                    <img src="../images/Avatar/{{$chitiet->AnhDaiDien}}" alt="AnhDaiDien" name='img_Avatar' id='img_Avatar' 
+                    <img src="../images/avatar/{{$chitiet->AnhDaiDien}}" alt="AnhDaiDien" name='img_Avatar' id='img_Avatar' 
                     style='width: 100%; height: 260px'>
                     <span class='btn-file btn btn-outline-dark'>
                     <input type="file" class='@error('inp_Avatar') is-invalid @enderror' name="inp_Avatar" id='inp_Avatar' >Chọn hình</span>

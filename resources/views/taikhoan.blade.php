@@ -35,7 +35,7 @@
             @foreach($dsTaiKhoan as $ds)
             <tr style='text-align:center'>
                 <td style='padding:50px 0'>{{$ds->username}}</td>
-                <td><img src="images/Avatar/{{$ds->AnhDaiDien}}"  alt="avatar" width='100px' height='100px'></td>
+                <td><img src="images/avatar/{{$ds->AnhDaiDien}}"  alt="avatar" width='100px' height='100px'></td>
                 <td style='padding:50px 0'>{{$ds->HoTen}}</td>
                 <td style='padding:50px 0'>{{$ds->SDT}}</td>
                 <td style='padding:50px 0'>{{$ds->Email}}</td>

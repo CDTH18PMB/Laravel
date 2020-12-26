@@ -28,6 +28,12 @@ Route::post('/CheckLogin', 'APIController@CheckLogin');
 
 Route::post('/Create_MonAn', 'APIController@Create_MonAn');
 
+Route::post('/Create_HuongDan', 'APIController@Create_HuongDan');
+
+Route::get('/MonAn/{id}', 'APIController@ChiTietMonAn');
+
+Route::get('/HuongDan/{id}', 'APIController@HuongDan'); 
+
 // Route::get('/TaiKhoan','CTNAController@APITaiKhoan')->name('API.TaiKhoan');
 // Route::get('/TaiKhoan/{id}','CTNAController@store_apitaikhoan')->name('API1.TaiKhoan');
 

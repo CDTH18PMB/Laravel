@@ -50,21 +50,21 @@
                                 <div class="account-wrap">
                                     <div class="account-item clearfix js-item-menu">
                                         <div class="image">
-                                            <img src="@yield('url')images/avatar/{{session('name')}}.jpg" alt="Avatar"/>
+                                            <img src="images/avatar/{{session('name')[0]}}" alt="Avatar"/>
                                         </div>
                                         <div class="content">
-                                            <a class="js-acc-btn" href="#">{{session('name')}}</a>
+                                            <a class="js-acc-btn" href="#">{{session('name')[1]}}</a>
                                         </div>
                                         <div class="account-dropdown js-dropdown">
                                             <div class="info clearfix">
                                                 <div class="image">
                                                     <a href="#">
-                                                        <img src="@yield('url')images/avatar/{{session('name')}}.jpg" alt="Avatar"/>
+                                                        <img src="images/avatar/{{session('name')[0]}}" alt="Avatar"/>
                                                     </a>
                                                 </div>
                                                 <div class="content">
                                                     <h5 class="name">
-                                                        <a href="#">{{session('name')}}</a>
+                                                        <a href="#">{{session('name')[1]}}</a>
                                                     </h5>
                                                 </div>
                                             </div>
@@ -338,6 +338,31 @@
                     });
                 }    
             });
+        });
+
+        function Filter_MonAn(){
+            var filter = $('#fil_value').val();
+            alert(filter);
+        }
+
+        $('#search_mon_an').keyup(function(){
+            var queryString = $('#search_mon_an').val();
+
+            if(queryString != ''){
+                var url = "http://localhost:8000/search_monan";
+                // sử dụng ajax
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    cache: false,
+                    data:{'queryString':queryString}, // dữ liệu sẽ truyển qua bên file xử lý
+                    success: function (data){ // nếu thành công
+                        $('#SearchResult').html(data);
+                    }    
+                });
+            } else {
+                $('#SearchResult').html('');
+            }
         });
     </script>
 </html>

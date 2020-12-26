@@ -18,46 +18,9 @@ use App\BinhLuan;
 
 class CTNAController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    // public function APITaiKhoan(){
-    //     $dsTaiKhoan = TaiKhoan::all();//lấy all dữ liệu trong model
-    //     return response()->json($dsTaiKhoan);
 
-    // }
+    //====================================== MÓN ĂN ==================================================
 
-    // public function store_apitaikhoan($id){
-    //     $dsTaiKhoan1 = TaiKhoan::where('username','=',$id)->get();
-    //     return response()->json($dsTaiKhoan1,201);
-    // }
-    
-    // public function APITaiKhoan1(Request $request){
-        
-    //     $LoaiTK = 'User';
-    //     $TrangThai = 1;
-
-    //     $insert_monan = MonAn::create([
-    //         'username'=>$request->username,
-    //         'AnhDaiDien'=>$request->AnhDaiDien,
-    //         'password'=>$request->password,
-    //         'HoTen'=>$request->HoTen,
-    //         'SDT'=>$request->SDT,
-    //         'Email'=>$request->Email,
-    //         'LoaiTK'=>$LoaiTK,
-    //         'TrangThai'=>$TrangThai
-    //     ]);
-    //     return response()->json($insert_monan);
-
-    // }
-    // public function APIMonAn(){
-    //     $dsMonAn1 = MonAn::all();//lấy all dữ liệu trong model
-    //     return response()->json($dsMonAn1);
-
-    // }
-    /*============================================================================================================================ */
     public function index()
     {
         $dsMonAn = MonAn::paginate(10);
@@ -68,47 +31,6 @@ class CTNAController extends Controller
         ];
         return view('index')->with($arr);
     }
-
-    public function danhmuc()
-    {
-        $dsDanhMuc = DanhMuc::all();
-        return view('danhmuc', ['dsDanhMuc'=>$dsDanhMuc]);
-    }
-    //Lấy dữ liệu bảng món ăn
-    public function duyet()
-    {
-        $dsDuyetCongThuc = MonAn::all();
-        return view('duyetcongthuc',['dsDuyetCongThuc'=>$dsDuyetCongThuc]);
-    }
-    //Lấy dữ liệu bảng bình luận
-    public function binhluan()
-    {
-        $dsBinhLuan = BinhLuan::all();
-        return view('binhluan', ['dsBinhLuan'=>$dsBinhLuan]);
-    }
- //api dm
- public function APIDanhMuc(Request $request)
- {
-     $danhmuc=DanhMuc::all();
-     return response()->json($danhmuc);
- }
- public function store(Request $request,$id)
- {
-     $danhmuc=DanhMuc::where('MaLoai','=',$id)->get();
-     return response()->json($danhmuc,201);
-    
- }
-    
-
-
-
-
-
-    /**========================================================================================================================
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
 
     public function create_monan()
     {
@@ -141,17 +63,6 @@ class CTNAController extends Controller
         }
     }
 
-    public function create_danhmuc()
-    {
-        return view('create_danhmuc');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store_MonAn(Request $request)
     {
         //======================== lưu món ăn ==================================
@@ -229,47 +140,7 @@ class CTNAController extends Controller
         $dsMonAn = MonAn::all();
         return redirect('/');
     }
-//store_DanhMuc
-public function store_DanhMuc(Request $request)
-{
-    $TenLoai = $request->TenLoai;
-    $TrangThai = 1;
 
-
-    DB::table('DanhMuc')->insert([
-        'TenLoai'=>$TenLoai,
-        'TrangThai'=>$TrangThai,
-        
-    ]);
-
-    $dsDanhMuc = DanhMuc::all();
-    return view('danhmuc',['dsDanhMuc'=>$dsDanhMuc]);
-}
-//sua danh muc
-public function show_update_DanhMuc(Request $request,$id)
-{
-    $TenLoai = $request->TenLoai;
-    $TrangThai = 1;
-
-
-
-
-    DanhMuc::where('MaLoai', '=', $id)->update([
-        'TenLoai'=>$TenLoai,
-        'TrangThai'=>$TrangThai
-    ]);
-    $dsDanhMuc = DB::table('DanhMuc')->get();
-    return redirect()->route('CTNA.danhmuc',['dsDanhMuc'=>$dsDanhMuc]);
-    
-}
-    //=============================================================================================================
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show_MonAn($id)
     {
         // load món ăn theo id
@@ -301,30 +172,6 @@ public function show_update_DanhMuc(Request $request,$id)
         return view('chitiet_monan',$arr);
     }
 
-    public function show_DanhMuc($id)
-    {
-        $chitiet_danhmuc = DanhMuc::where('MaLoai', '=', $id)->get();
-        
-        return view('chitiet_danhmuc', ['chitiet_danhmuc'=>$chitiet_danhmuc]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update_MonAn(Request $request, $id)
     {
         //====================================== Thay đổi thư mục hình ====================================
@@ -422,35 +269,7 @@ public function show_update_DanhMuc(Request $request,$id)
         $dsMonAn = MonAn::all();
         return redirect('/')->with('update_success', 'Cập nhật món ăn thành công');
     }
-    //Duyệt bình luận
-    public function allow_comment(Request $request){
-        $data = $request->all();
-        $dsBinhLuan = BinhLuan::where('MaMon',$data['MaMon'])->update(['TrangThai'=>1]);
 
-    }
-    //Xoá bình luận
-    public function delete_comment(Request $request){
-        $data = $request->all();
-        $dsBinhLuan = BinhLuan::where('MaMon',$data['MaMon'])->delete(['TrangThai']);
-
-    }
-    //Duyệt Công thức
-    public function allow_cook(Request $request){
-        $data = $request->all();
-        $dsDuyetCongThuc = MonAn::where('MaMon',$data['MaMon'])->update(['TrangThai'=>1]);
-    }
-    //Xoá công thức
-    public function delete_cook(Request $request){
-        $data = $request->all();
-        $dsDuyetCongThuc = MonAn::where('MaMon',$data['MaMon'])->delete(['TrangThai']);
-
-    }
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function delete($id)
     {
         $delete_monan = MonAn::where('MaMon', $id)->update(['TrangThai'=>0]);
@@ -470,48 +289,108 @@ public function show_update_DanhMuc(Request $request,$id)
 
     }
 
-    public function CheckLogin()
+    public function search_monan(Request $request)
     {
-        // $username = $request->username;
-        // $password = $request->password;
-
-        // $data = [
-        //     'username'=>$username,
-        //     'password'=>$password,
-        // ];
-
-        // if(Auth::attempt($data))
-        // {
-        //     return 'success';
-        // }
-        // else
-        // {
-        //     return 'false';
-        // }
-        return 'success';
+        $queryString = $request->queryString;
+        $search = MonAn::where('TenMon', 'LIKE', "%$queryString%")->get();
+        $output = "<div class='list-group'>";
+        foreach($search as $row)
+        {
+            $output .= "<a href='MonAn/$row->MaMon' class='list-group-item list-group-item-action'>$row->TenMon</a>";
+        }
+        $output .= '</div>';
+        echo $output;
     }
-      //xoa danh muc
-      public function destroy_DanhMuc($id)
-      {
-          DB::table('DanhMuc')->where('MaLoai',$id)->update(['TrangThai'=>0]);
-  
-          $dsDanhMuc = DB::table('DanhMuc')->get();
-          return redirect()->route('CTNA.danhmuc',['dsDanhMuc'=>$dsDanhMuc]);
-      }
 
-      //tim kiem danh muc
-    public function TimKiem(Request $request){
+    //======================================= DANH MỤC ======================================================
+
+    public function danhmuc()
+    {
+        $dsDanhMuc = DanhMuc::all();
+        return view('danhmuc', ['dsDanhMuc'=>$dsDanhMuc]);
+    }
+
+    public function create_danhmuc()
+    {
+        return view('create_danhmuc');
+    }
+
+    public function show_DanhMuc($id)
+    {
+        $chitiet_danhmuc = DanhMuc::where('MaLoai', '=', $id)->get();
+        
+        return view('chitiet_danhmuc', ['chitiet_danhmuc'=>$chitiet_danhmuc]);
+    }
+
+    //store_DanhMuc
+    public function store_DanhMuc(Request $request)
+    {
+        $TenLoai = $request->TenLoai;
+        $TrangThai = 1;
+
+
+        DB::table('DanhMuc')->insert([
+            'TenLoai'=>$TenLoai,
+            'TrangThai'=>$TrangThai,
+            
+        ]);
+
+        $dsDanhMuc = DanhMuc::all();
+        return view('danhmuc',['dsDanhMuc'=>$dsDanhMuc]);
+    }
+    //sua danh muc
+    public function show_update_DanhMuc(Request $request,$id)
+    {
+        $TenLoai = $request->TenLoai;
+        $TrangThai = 1;
+
+        DanhMuc::where('MaLoai', '=', $id)->update([
+            'TenLoai'=>$TenLoai,
+            'TrangThai'=>$TrangThai
+        ]);
+        $dsDanhMuc = DB::table('DanhMuc')->get();
+        return redirect()->route('CTNA.danhmuc',['dsDanhMuc'=>$dsDanhMuc]);
+        
+    }
+
+    //xoa danh muc
+    public function destroy_DanhMuc($id)
+    {
+        DB::table('DanhMuc')->where('MaLoai',$id)->update(['TrangThai'=>0]);
+
+        $dsDanhMuc = DB::table('DanhMuc')->get();
+        return redirect()->route('CTNA.danhmuc',['dsDanhMuc'=>$dsDanhMuc]);
+    }
+
+    //tim kiem danh muc
+    public function TimKiem(Request $request)
+    {
         $dsDanhMuc=DanhMuc::where('TenLoai','like','%'.$request->key.'%')
         ->where('TrangThai',1)->get();
-         return view('search',compact('dsDanhMuc'));
+        return view('search',compact('dsDanhMuc'));
+    }
+
+    //======================================= CÔNG THỨC ĐANG CHỜ ======================================================
+    //Lấy dữ liệu bảng món ăn
+    public function duyet()
+    {
+        $dsDuyetCongThuc = MonAn::all();
+        return view('duyetcongthuc',['dsDuyetCongThuc'=>$dsDuyetCongThuc]);
+    }
+
+    //Lấy dữ liệu bảng bình luận
+    public function binhluan()
+    {
+        $dsBinhLuan = BinhLuan::all();
+        return view('binhluan', ['dsBinhLuan'=>$dsBinhLuan]);
     }
 
     //tìm kiếm
     public function getSearch(Request $request)
-    {
-        
+    {  
         return view('chitiet_monan');
     }
+
     function getSearchAjax(Request $request)
     {
         if($request->get('query'))
@@ -533,7 +412,34 @@ public function show_update_DanhMuc(Request $request,$id)
        }
     }
 
-// Controller tài khoản ---------------------------------------------------------------------------
+    //Duyệt Công thức
+    public function allow_cook(Request $request){
+        $data = $request->all();
+        $dsDuyetCongThuc = MonAn::where('MaMon',$data['MaMon'])->update(['TrangThai'=>1]);
+    }
+    //Xoá công thức
+    public function delete_cook(Request $request){
+        $data = $request->all();
+        $dsDuyetCongThuc = MonAn::where('MaMon',$data['MaMon'])->delete(['TrangThai']);
+
+    }
+
+    //======================================= BÌNH LUẬN ======================================================
+    
+    //Duyệt bình luận
+    public function allow_comment(Request $request){
+        $data = $request->all();
+        $dsBinhLuan = BinhLuan::where('MaMon',$data['MaMon'])->update(['TrangThai'=>1]);
+
+    }
+    //Xoá bình luận
+    public function delete_comment(Request $request){
+        $data = $request->all();
+        $dsBinhLuan = BinhLuan::where('MaMon',$data['MaMon'])->delete(['TrangThai']);
+
+    }
+
+    //======================================= TÀI KHOẢN ======================================================
 
     // index tài khoản
     public function taikhoan()
@@ -718,6 +624,5 @@ public function show_update_DanhMuc(Request $request,$id)
            echo $output;
        }
     }
-// Kết thúc phần Controller tài khoản -------------------------------------------------------------
 
 }

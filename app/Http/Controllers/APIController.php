@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Auth;
+use Illuminate\Support\Facades\Storage;
 
 use App\MonAn;
 use App\HuongDan;
@@ -37,6 +38,17 @@ class APIController extends Controller
         return response()->json($dsTaiKhoan);
     }
 
+    public function ChiTietMonAn($id)
+    {
+        $dsMonAn = MonAn::where('MaMon', $id)->get();
+        return response()->json($dsMonAn);
+    }
+
+    public function HuongDan($id)
+    {
+        $HuongDan = HuongDan::where('MaMon', $id)->get();
+        return response()->json($HuongDan);
+    }
     //==================================================================================================
 
     // api kiểm tra đăng nhập
@@ -70,8 +82,17 @@ class APIController extends Controller
         $nguoitao = $_POST['NguoiTao'];
         $loaimon = $_POST['LoaiMon'];
         $trangthai = $_POST['TrangThai'];
+        $img = $_POST['Image'];
 
-        $data = [
+        $url = 'images/'.$tenmon.'/'.$anhdaidien;
+
+        $img = str_replace('data:image/jpg;base64,', '', $img);
+        $img = str_replace(' ', '+', $img);
+        $data = base64_decode($img);
+        
+        Storage::put($url, $data);
+
+        $data_monam = [
             'TenMon'=>$tenmon,
             'AnhDaiDien'=>$anhdaidien,
             'MoTa'=>$mota,
@@ -85,12 +106,83 @@ class APIController extends Controller
             'TrangThai'=>$trangthai,
         ];
 
-        $insert = MonAn::create($data);
+        $insert = MonAn::create($data_monam);
 
-        if($insert)
-        {
-            return 'success';
-        }
-        return 'fail';
+        return 'success';
     }
+
+    // api tạo hướng dẫn cho món ăn
+    public function Create_HuongDan()
+    {
+        $temp = MonAn::orderBy('MaMon', 'desc')->get();
+        $mamon = $temp[0]->MaMon;
+        $tenmon = $temp[0]->TenMon;
+        $huongdan = $_POST['HuongDan'];
+        $jsonArray = json_decode($huongdan, true);
+
+        for($i = 0; $i < count($jsonArray); $i++)
+        {
+            // lưu hình các bước làm
+            $url = 'images/'.$tenmon.'/'.'buoc'.($i+1).'.jpg';
+            $img = $jsonArray[$i]['encodeImage'];
+
+            $img = str_replace('data:image/jpg;base64,', '', $img);
+            $img = str_replace(' ', '+', $img);
+            $data = base64_decode($img);
+        
+            Storage::put($url, $data);
+
+            // lưu các bước làm vào csdl
+            $data = [
+                'MaMon'=>$mamon,
+                'CacBuocLam'=>$jsonArray[$i]['contentStep'],
+                'HinhAnh'=>'buoc'.($i + 1).'.jpg',
+            ];
+            $insert = HuongDan::create($data);
+        }
+
+        
+        return 'success';
+    }
+    
+    //====================================================================================================
+        // public function APITaiKhoan(){
+    //     $dsTaiKhoan = TaiKhoan::all();//lấy all dữ liệu trong model
+    //     return response()->json($dsTaiKhoan);
+
+    // }
+
+    // public function store_apitaikhoan($id){
+    //     $dsTaiKhoan1 = TaiKhoan::where('username','=',$id)->get();
+    //     return response()->json($dsTaiKhoan1,201);
+    // }
+    
+    // public function APITaiKhoan1(Request $request){
+        
+    //     $LoaiTK = 'User';
+    //     $TrangThai = 1;
+
+    //     $insert_monan = MonAn::create([
+    //         'username'=>$request->username,
+    //         'AnhDaiDien'=>$request->AnhDaiDien,
+    //         'password'=>$request->password,
+    //         'HoTen'=>$request->HoTen,
+    //         'SDT'=>$request->SDT,
+    //         'Email'=>$request->Email,
+    //         'LoaiTK'=>$LoaiTK,
+    //         'TrangThai'=>$TrangThai
+    //     ]);
+    //     return response()->json($insert_monan);
+
+    // }
+    // public function APIMonAn(){
+    //     $dsMonAn1 = MonAn::all();//lấy all dữ liệu trong model
+    //     return response()->json($dsMonAn1);
+
+        // public function store(Request $request,$id)
+        // {
+        //     $danhmuc=DanhMuc::where('MaLoai','=',$id)->get();
+        //     return response()->json($danhmuc,201);
+        // }
+    // }
 }
