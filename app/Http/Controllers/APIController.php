@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Facades\Storage;
@@ -199,4 +200,104 @@ class APIController extends Controller
         //     return response()->json($danhmuc,201);
         // }
     // }
+
+    //=========================================== Tài Khoản =======================================
+    //  danh sách tài khoản
+    public function index_taikhoan()
+    {
+        // $TaiKhoan =  TaiKhoan::all();
+        $TaiKhoan = TaiKhoan::where("TrangThai","=","1")->get();
+        return response()->json($TaiKhoan);
+        // return TaiKhoanResource::collection($TaiKhoan);
+    }
+    //  thêm TK
+    public function create_taikhoan(Request $request)
+    {
+        $LoaiTK     = 'User';
+        $TrangThai  = 1;
+        $username   = $request->username;
+        TaiKhoan::insert([
+            'username'  => $request->username,
+            'AnhDaiDien'=> $request->AnhDaiDien,
+            'password'  => bcrypt($request->password),
+            'HoTen'     => $request->HoTen,
+            'SDT'       => $request->SDT,
+            'Email'     => $request->Email,
+            'LoaiTK'    => $LoaiTK,
+            'TrangThai' => $TrangThai,
+        ]);
+        $TaiKhoan = TaiKhoan::where('username', $request->username)->get();
+        return response()->json($TaiKhoan);
+        // return TaiKhoanResource::collection($TaiKhoan);
+    }
+    //  chi tiết TK
+    public function detail_taikhoan($username)
+    {
+        $TaiKhoan   = TaiKhoan::where('username', $username)->get();
+        return response()->json($TaiKhoan);
+        // return TaiKhoanResource::collection($TaiKhoan);
+    }
+    //  cập nhật
+    public function update_taikhoan(Request $request, $username)
+    {
+        if($request->password == ""){
+            TaiKhoan::where('username',$username)->update([
+                'username'  => $request->username,
+                'AnhDaiDien'=> $request->AnhDaiDien,
+                'HoTen'     => $request->HoTen,
+                'SDT'       => $request->SDT,
+                'Email'     => $request->Email,
+            ]);}
+        else{
+            TaiKhoan::where('username',$username)->update([
+                'username'  => $request->username,
+                'AnhDaiDien'=>$request->AnhDaiDien,
+                'password'  =>  bcrypt($request->password),
+                'HoTen'     => $request->HoTen,
+                'SDT'       => $request->SDT,
+                'Email'     => $request->Email,
+            ]);}
+        $taikhoan = TaiKhoan::where('username',$username)->get();
+        return response()->json($TaiKhoan);
+        // return TaikhoanResource::collection($taikhoan);
+    }
+    // xoá TK
+    public function delete_taikhoan($username)
+    {
+        TaiKhoan::where('username',$username)->delete();
+        return response()->json("Xoá thành công");
+    }
+    //  danh sách món dã tạo
+    public function show_mondatao($nguoitao)
+    {
+        // $mondatao = MonAn::where('nguoitao',$nguoitao)->get();
+        $mondatao = MonAn::where([['nguoitao',$nguoitao], ['TrangThai','=','1']])->get();
+        return response()->json($mondatao);
+    }
+    //  danh sách món đã thích
+    public function show_mondathich($username)
+    {
+        $monandathich = DB::table('MonAnDaThich')->join('MonAn', 'MonAn.MaMon', '=', 'MonAnDaThich.MaMon')
+        ->where([['MonAnDaThich.Username', '=', $username],['MonAn.TrangThai','=','1']])
+        ->get();
+        return response()->json($monandathich);
+    }
+    //  tăng lượt xem
+    public function plus_luotxem(Request $request, $id)
+    {
+        MonAn::where("MaMon",$id)->update(['LuotXem' => $request->LuotXem,]);
+        return response()->json("Success");
+    }
+    // cập nhật trạng thái xoá
+    public function delete_mondatao($id)
+    {
+        MonAn::where('MaMon',$id)->update(['TrangThai'=>0]);
+        return response()->json("Success");
+    }
+    public function unlike_mondathich(Request $request, $id)
+    {
+        MonAn::where('MaMon',$id)->update(['luotthich'=>$request->luotthich]);
+        MonAnDaThich::where([['MaMon',$id],['Username','=',$request->Username ]])->delete();
+        return response()->json("Success");
+    }
 }

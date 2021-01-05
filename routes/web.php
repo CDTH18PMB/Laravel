@@ -16,7 +16,7 @@ Route::group(['prefix'=>'/', 'middleware'=>'CheckLogin'], function(){
     // Bình Luận
     Route::get('/binhluan', 'CTNAController@binhluan')->name('CTNA.binhluan');
 
-    // index tài khoản
+    //  tài khoản
     Route::get('/taikhoan', 'CTNAController@taikhoan')->name('CTNA.taikhoan');
     
     //=========================================== Chi tiết ======================================================
@@ -26,7 +26,7 @@ Route::group(['prefix'=>'/', 'middleware'=>'CheckLogin'], function(){
     //sua dm
     Route::get('/DanhMuc/Update/{id}', 'CTNAController@show_DanhMuc')->name('CTNA.show_danhmuc');
 
-    // detail tài khoản
+    //  chi tiết tài khoản
     Route::get('/taikhoan/{id}', 'CTNAController@show_taikhoan')->name('CTNA.show_taikhoan');
 
     //=========================================== Update ======================================================
@@ -35,7 +35,7 @@ Route::group(['prefix'=>'/', 'middleware'=>'CheckLogin'], function(){
     
     Route::post('/DanhMuc/Update/{id}', 'CTNAController@show_update_DanhMuc')->name('CTNA.show_update_danhmuc');
 
-    // xử lý cập nhật
+    //  xử lý cập nhật tài khoản
     Route::post('/TaiKhoan/Update/{id}', 'CTNAController@update_taikhoan')->name('CTNA.update_taikhoan');
 
     //============================================= Delete =============================================
@@ -51,9 +51,9 @@ Route::group(['prefix'=>'/', 'middleware'=>'CheckLogin'], function(){
     //Xoá công thức
     Route::delete('/delete-cook','CTNAController@delete_cook');
 
-     // xử lý khoá
+     // xử lý khoá tài khoản
      Route::get('/lockout_taikhoan/{id}', 'CTNAController@lockout_taikhoan')->name('CTNA.lockout_taikhoan');
-     // xử lý mở khoá
+     // xử lý mở khoá tài khoản
      Route::get('/open_taikhoan/{id}', 'CTNAController@open_taikhoan')->name('CTNA.open_taikhoan');
 
     //Xoá bình luận
@@ -67,17 +67,17 @@ Route::group(['prefix'=>'/', 'middleware'=>'CheckLogin'], function(){
 
     Route::get('/create_danhmuc', 'CTNAController@create_danhmuc')->name('CTNA.create_danhmuc');
 
-    Route::get('/create_taikhoan', 'CTNAController@create_taikhoan')->name('CTNA.create_taikhoan');
+    // Route::get('/create_taikhoan', 'CTNAController@create_taikhoan')->name('CTNA.create_taikhoan');
 
     Route::post('/store_monan', 'CTNAController@store_MonAn')->name('CTNA.store_monan');
 
     //create danh muc
     Route::post('/store_danhmuc', 'CTNAController@store_DanhMuc')->name('CTNA.store_danhmuc');
 
-    // store tài khoản
+    //  thêm tài khoản
     Route::get('/create_taikhoan', 'CTNAController@create_taikhoan')->name('CTNA.create_taikhoan');
 
-    // xử lý thêm
+    //  xử lý thêm tài khoản
     Route::post('/store_taikhoan', 'CTNAController@store_TaiKhoan')->name('CTNA.store_taikhoan');
 
     //====================================== Lọc + Sắp xếp ========================================
@@ -92,7 +92,7 @@ Route::group(['prefix'=>'/', 'middleware'=>'CheckLogin'], function(){
     //tim kiem danh muc
     Route::get('timkiem','CTNAController@TimKiem')->name('CTNA.timkiem');
 
-    // xử lý tìm kiếm tài khoản
+    //  xử lý tìm kiếm tài khoản
     Route::post('search/taikhoan', 'CTNAController@search_taikhoan')->name('CTNA.search_taikhoan');
 
     //Tìm kiếm
