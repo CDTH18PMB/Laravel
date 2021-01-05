@@ -20,6 +20,8 @@ class APIController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    //============================================ GET API ====================================================
     public function index()
     {
         $dsMonAn = MonAn::all();
@@ -49,7 +51,8 @@ class APIController extends Controller
         $HuongDan = HuongDan::where('MaMon', $id)->get();
         return response()->json($HuongDan);
     }
-    //==================================================================================================
+
+    //=================================================== Login ==============================================
 
     // api kiểm tra đăng nhập
     public function CheckLogin()
@@ -64,9 +67,20 @@ class APIController extends Controller
         }
         else
         {
-            return 'false';
+            return 'fail';
         }
     }
+
+    public function CheckLoginEXP(){
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        $data = ['username'=>$username, 'password'=>$password, 'trangthai'=>1];
+        if(Auth::attempt($data)){
+
+        }
+    }
+
+    //=====================================================================================================
 
     // api tạo công thức mới
     public function Create_MonAn()

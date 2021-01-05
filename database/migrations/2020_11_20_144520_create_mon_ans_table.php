@@ -18,7 +18,7 @@ class CreateMonAnsTable extends Migration
             $table->increments('MaMon');
             $table->string('TenMon',100);
             $table->string('AnhDaiDien',50);
-            $table->longText('MoTa');
+            $table->text('MoTa');
             $table->string('DoKho',10);
             $table->string('ThoiGianNau',50);
             $table->text('NguyenLieu');

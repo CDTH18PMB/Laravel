@@ -14,16 +14,15 @@ class CreateTaiKhoansTable extends Migration
     public function up()
     {
         Schema::create('TaiKhoan', function (Blueprint $table) {
-            $table->string('username');
+            $table->string('username', 20);
             $table->primary('username');
 
-            $table->string('AnhDaiDien');
-            $table->string('password');
+            $table->string('AnhDaiDien', 50);
+            $table->string('password', 200);
             $table->string('HoTen',50);
             $table->char('SDT',10);
             $table->string('Email',100);
             $table->string('LoaiTK',20);
-            $table->rememberToken();
             $table->tinyinteger('TrangThai');
             $table->timestamps(); 
         });

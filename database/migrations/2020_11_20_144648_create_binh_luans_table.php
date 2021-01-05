@@ -15,10 +15,9 @@ class CreateBinhLuansTable extends Migration
     {
         //Bảng Bình luận
         Schema::create('BinhLuan', function (Blueprint $table) {
-            $table->unsignedInteger('MaMon');//foreignkey  
-            $table->string('TenMon');     
+            $table->unsignedInteger('MaMon');//foreignkey   
             $table->string('Username',20);//foreignkey
-            $table->string('NoiDung',200);
+            $table->string('NoiDung',100);
             $table->tinyinteger('TrangThai');
         });
     }

@@ -17,14 +17,20 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+//======================================== Login ======================================================
 
+Route::post('/CheckLogin', 'APIController@CheckLogin');
+
+Route::post('/CheckLoginEXP', 'APIController@CheckLoginEXP');
+
+//======================================================================================
 Route::get('/MonAn', 'APIController@index')->name('API.MonAn');
 
 Route::get('/DanhMuc', 'APIController@DanhMuc')->name('API.DanhMuc');
 
 Route::get('/TaiKhoan', 'APIController@TaiKhoan')->name('API.TaiKhoan');
 
-Route::post('/CheckLogin', 'APIController@CheckLogin');
+
 
 Route::post('/Create_MonAn', 'APIController@Create_MonAn');
 
