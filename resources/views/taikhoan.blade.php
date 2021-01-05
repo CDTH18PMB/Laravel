@@ -40,13 +40,19 @@
                 <td style='padding:50px 0'>{{$ds->SDT}}</td>
                 <td style='padding:50px 0'>{{$ds->Email}}</td>
                 <td style='padding:50px 0'>{{$ds->LoaiTK}}</td>
-                <td style='padding:50px 0'>{{$ds->TrangThai}}</td>
-                <td style='padding:40px 0'><a href="{{route('CTNA.show_taikhoan', ['id'=>$ds->username])}}"><button class='btn btn-info'>Chi tiết</button></a></td>
+                <td style='padding:50px 0'>@if($ds->TrangThai==1) <p style="color: aquamarine">hoạt Động</p>  
+                                            @else <p style="color: hotpink">đã Khoá</p>@endif</td>
+                <td style='padding:40px 0'><a href="{{route('CTNA.show_taikhoan', ['id'=>$ds->username])}}">
+                    <button class='btn btn-info'>Chi tiết</button></a></td>
             </tr>
             @endforeach
         </tbody>
     </table>
 </div>
+<div class='col-12 d-flex justify-content-center' style='margin-top:20px'>
+{{$dsTaiKhoan->links()}}
+</div>
+
 <script src="{{ URL::asset('vendor/jquery-3.2.1.min.js') }}"></script>
 <script>
 $(document).ready(function(){
