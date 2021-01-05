@@ -43,3 +43,26 @@ Route::get('/HuongDan/{id}', 'APIController@HuongDan');
 
 //Route::get('/DanhMuc','CTNAController@APIDanhMuc')->name('API.DanhMuc');
 //Route::get('/DanhMuc1/{id}','CTNAController@store')->name('store.DanhMuc');
+
+//=========================================== Tài Khoản ===========================================
+//danh sách TK
+Route::get('/index_taikhoan', 'APIController@index_taikhoan');
+//chi tiết TK
+Route::get('/detail_taikhoan/{username}','APIController@detail_taikhoan');
+//thêm TK
+Route::post('/create_taikhoan', 'APIController@create_taikhoan');
+//cập nhật TK
+Route::patch('/update_taikhoan/{username}', 'APIController@update_taikhoan');
+//xoá TK
+ Route::delete('/delete_taikhoan/{username}', 'APIController@delete_taikhoan');
+
+ //danh sách món đã tạo
+ Route::get('/show_mondatao/{nguoitao}', 'APIController@show_mondatao');
+ //danh sách món đã thích
+ Route::get('/show_mondathich/{username}', 'APIController@show_mondathich');
+//tăng lượt xem
+ Route::post('/plus_luotxem/{id}', 'APIController@plus_luotxem');
+//cập nhật trạng thái xoá
+Route::post('/delete_mondatao/{id}', 'APIController@delete_mondatao');
+//Xoá món đã thích cập nhật lại lượt thích
+Route::post('/unlike_mondathich/{id}', 'APIController@unlike_mondathich');

@@ -28,13 +28,13 @@
         <div class="row">
             <h4 style='font-style: italic;'>Thông tin tài khoản</h4>
             @if ($chitiet->TrangThai == 1)
-            <h4 style='font-style: italic; color:rgb(0, 255, 0)' id="txt_danghoatdong">: Đang hoạt động</h4>
+            <h4 style='font-style: italic; color:aquamarine' id="txt_danghoatdong">: Đang hoạt động</h4>
             {{-- ẩn đã khoá --}}
-            <h4 style='display: none;font-style: italic; color:rgb(255, 0, 0)' id="txt_dakhoa">: Đã khoá</h4>
+            <h4 style='display: none;font-style: italic; color:  hotpink' id="txt_dakhoa">: Đã khoá</h4>
             @else
-            <h4 style='font-style: italic; color:rgb(255, 0, 0)' id="txt_dakhoa">: Đã khoá</h4>
+            <h4 style='font-style: italic; color: hotpink' id="txt_dakhoa">: Đã khoá</h4>
             {{-- ẩn đang hoạt động --}}
-            <h4 style='display: none;font-style: italic; color:rgb(0, 255, 0)' id="txt_danghoatdong">: Đang hoạt động</h4>
+            <h4 style='display: none;font-style: italic; color:aquamarine' id="txt_danghoatdong">: Đang hoạt động</h4>
             @endif
         </div>
         <div class='hr'></div>
@@ -98,7 +98,11 @@
                 </div>
             </div>
         </div>
-        <button class='btn btn-primary' style='width:100%'>Cập nhật</button>
+        @if ($chitiet->TrangThai == 1) <button class='btn btn-primary' id="btn_hoatdong" style='width:100%'>Cập nhật</button>
+        <button class='btn btn-secondary' disabled data-bs-toggle="button" id="btn_dakhoa" style='display: none;width:100%'>Cập nhật</button>
+        @else <button class='btn btn-primary' id="btn_hoatdong" style='display: none;width:100%'>Cập nhật</button>
+        <button class='btn btn-secondary' disabled data-bs-toggle="button" id="btn_dakhoa" style='width:100%'>Cập nhật</button>
+        @endif
     </form>
     @endforeach
 {{-- hiện danh sách món đã tạo, đã thích --}}
@@ -188,6 +192,8 @@ $("#mondathich").click(function(){
                 $("#txt_danghoatdong").hide();
                 $("#open_taikhoan").show();
                 $("#txt_dakhoa").show();
+                $("#btn_hoatdong").hide();
+                $("#btn_dakhoa").show();
             },
             error: function(response){
                 alert(response.error);
@@ -210,6 +216,8 @@ $("#open_taikhoan").click(function(e){
                 $("#txt_dakhoa").hide();
                 $("#lockout_taikhoan").show();
                 $("#txt_danghoatdong").show();
+                $("#btn_dakhoa").hide();
+                $("#btn_hoatdong").show();
             },
             error: function(response){
                 alert(response.error);
