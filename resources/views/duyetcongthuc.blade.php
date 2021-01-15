@@ -43,7 +43,7 @@
                 <td style='padding:70px 0'>{{$duyetct->TrangThai}}</td>
                 <td >
                     <div style='margin-bottom:3px'>
-                        <a href="{{route('CTNA.show_monan', ['id'=>2])}}" class='link_duyet'>Chi tiết</a>
+                        <a href="{{route('CTNA.show_monan', ['id'=>$duyetct->MaMon])}}" class='link_duyet'>Chi tiết</a>
                     </div>
                     @if($duyetct->TrangThai == 0 )
                     <div style='margin-bottom:3px'>

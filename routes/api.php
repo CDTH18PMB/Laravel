@@ -49,6 +49,11 @@ Route::get('/HuongDan/{id}', 'APIController@HuongDan');
 Route::post('/Update_TaiKhoan', 'APIController@Update_TaiKhoan');
 
 Route::post('/Update_TaiKhoan_AnhDaiDien', 'APIController@Update_TaiKhoan_AnhDaiDien');
+Route::post('/Create_BinhLuan/{id}','APIController@Create_BinhLuan');
+ 
+Route::get('/BinhLuan/{id}', 'APIController@BinhLuan'); 
+
+Route::get('/TimTen','APIController@TimTen');
 
 // Route::get('/TaiKhoan','CTNAController@APITaiKhoan')->name('API.TaiKhoan');
 // Route::get('/TaiKhoan/{id}','CTNAController@store_apitaikhoan')->name('API1.TaiKhoan');

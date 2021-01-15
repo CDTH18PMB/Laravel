@@ -1,6 +1,7 @@
 @extends('layout')
 
 @section('content')
+@section('url')../../@endsection
 @foreach($chitiet_danhmuc as $chitiet)
 <a href="{{route('CTNA.danhmuc')}}"><button class='btn btn-dark' style='margin:0 0 15px 20px'>Quay lại</button></a>
 <form method='POST' action="{{route('CTNA.show_update_danhmuc',['id'=>$chitiet->MaLoai])}}"> 
