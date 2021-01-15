@@ -444,7 +444,7 @@ class CTNAController extends Controller
     // index tài khoản
     public function taikhoan()
     {
-        $dsTaiKhoan = TaiKhoan::all();
+        $dsTaiKhoan = TaiKhoan::paginate(4);
 
         return view('TaiKhoan', ['dsTaiKhoan'=>$dsTaiKhoan]);
     }
@@ -616,11 +616,11 @@ class CTNAController extends Controller
             $output = '<ul class="dropdown-menu" style="display:block">';
             foreach($data as $row)
             {
-               $output .= '<li><a href="taikhoan/'. $row->username .'">
-               <p style="color:red">TÀI KHOẢN: '.$row->username.' [ SDT: '.$row->SDT.' ]</p>
-               </a></li>';
+                $output .= '<li class="list-group-item">
+                <a  href="taikhoan/'. $row->username.'">TÀI KHOẢN: '.$row->username.' [ SDT: '.$row->SDT.' ]
+                </li>';
             }
-           $output .= '</ul>';
+            $output .= '</ul>';
            echo $output;
        }
     }
