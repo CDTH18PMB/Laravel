@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use Auth;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Storage;
 
 use App\MonAn;
@@ -16,11 +17,7 @@ use App\BinhLuan;
 
 class APIController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    use AuthenticatesUsers;
 
     //============================================ GET API ====================================================
     public function index()
@@ -53,7 +50,7 @@ class APIController extends Controller
         return response()->json($HuongDan);
     }
 
-    //=================================================== Login ==============================================
+    //========================================= Login + Logout==============================================
 
     // api kiểm tra đăng nhập
     public function CheckLogin()
@@ -63,21 +60,44 @@ class APIController extends Controller
         $data = ['username'=>$username, 'password'=>$password, 'TrangThai'=>1];
         if(Auth::attempt($data))
         {
-            $dsTaiKhoan = ['TaiKhoan'=>TaiKhoan::where('username', $username)->get()];
+            $dsTaiKhoan = TaiKhoan::where('username', $username)->get();
             return response()->json($dsTaiKhoan);
         }
-        else
-        {
-            return 'fail';
-        }
+        return 'fail';
     }
 
-    public function CheckLoginEXP(){
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-        $data = ['username'=>$username, 'password'=>$password, 'trangthai'=>1];
-        if(Auth::attempt($data)){
+    public function Logout(){
+        Auth::logout();
+        return 'success';
+    }
 
+    //=========================================== SignUp ==============================================
+    public function SignUp(){
+        $dataAccount = $_POST['Account'];
+        $json = json_decode($dataAccount);
+
+        $username = $json->Username;
+        
+        $taikhoan = TaiKhoan::where('username', $username)->get();
+
+        if(count($taikhoan) == 0){
+    
+            $data = [
+                'username'=>$json->AnhDaiDien,
+                'AnhDaiDien'=>$json->AnhDaiDien,
+                'password'=>bcrypt($json->Password),
+                'HoTen'=>$json->HoTen,
+                'SDT'=>$json->SDT,
+                'Email'=>$json->Email,
+                'LoaiTK'=>$json->LoaiTK,
+                'TrangThai'=>$json->TrangThai,
+            ];
+            
+            $insert = DB::table('TaiKhoan')->insert($data);
+    
+            return 'success';
+        } else{
+            return 'exists';
         }
     }
 
@@ -160,7 +180,37 @@ class APIController extends Controller
         return 'success';
     }
     
-    //====================================================================================================
+    //======================================= Update ======================================================
+
+    // cập nhật thông tin tài khoản
+    public function Update_TaiKhoan(){
+        $username = $_POST['Username'];
+
+        $data = [
+            'HoTen'=>$_POST['HoTen'],
+            'SDT'=>$_POST['SDT'],
+            'Email'=>$_POST['Email'],
+        ];
+
+        $update = TaiKhoan::where('username', $username)->update($data);
+        return 'success';
+    }
+
+    // cập nhật ảnh đại diện tài khoản
+    public function Update_TaiKhoan_AnhDaiDien(){
+        $username = $_POST['Username'];
+        $encodeImage = $_POST['encodeImage'];
+
+        $url = 'images/avatar/'.$username.'.jpg';
+
+        $encodeImage = str_replace('data:image/jpg;base64,', '', $encodeImage);
+        $encodeImage = str_replace(' ', '+', $encodeImage);
+        $data = base64_decode($encodeImage);
+        
+        Storage::put($url, $data);
+
+        return 'success';
+    }
         // public function APITaiKhoan(){
     //     $dsTaiKhoan = TaiKhoan::all();//lấy all dữ liệu trong model
     //     return response()->json($dsTaiKhoan);
@@ -236,30 +286,6 @@ class APIController extends Controller
         $TaiKhoan   = TaiKhoan::where('username', $username)->get();
         return response()->json($TaiKhoan);
         // return TaiKhoanResource::collection($TaiKhoan);
-    }
-    //  cập nhật
-    public function update_taikhoan(Request $request, $username)
-    {
-        if($request->password == ""){
-            TaiKhoan::where('username',$username)->update([
-                'username'  => $request->username,
-                'AnhDaiDien'=> $request->AnhDaiDien,
-                'HoTen'     => $request->HoTen,
-                'SDT'       => $request->SDT,
-                'Email'     => $request->Email,
-            ]);}
-        else{
-            TaiKhoan::where('username',$username)->update([
-                'username'  => $request->username,
-                'AnhDaiDien'=>$request->AnhDaiDien,
-                'password'  =>  bcrypt($request->password),
-                'HoTen'     => $request->HoTen,
-                'SDT'       => $request->SDT,
-                'Email'     => $request->Email,
-            ]);}
-        $taikhoan = TaiKhoan::where('username',$username)->get();
-        return response()->json($TaiKhoan);
-        // return TaikhoanResource::collection($taikhoan);
     }
     // xoá TK
     public function delete_taikhoan($username)

@@ -50,7 +50,7 @@
                                 <div class="account-wrap">
                                     <div class="account-item clearfix js-item-menu">
                                         <div class="image">
-                                            <img src="images/avatar/{{session('name')[0]}}" alt="Avatar"/>
+                                            <img src="@yield('url')images/avatar/{{session('name')[0]}}" alt="Avatar"/>
                                         </div>
                                         <div class="content">
                                             <a class="js-acc-btn" href="#">{{session('name')[1]}}</a>
@@ -59,7 +59,7 @@
                                             <div class="info clearfix">
                                                 <div class="image">
                                                     <a href="#">
-                                                        <img src="images/avatar/{{session('name')[0]}}" alt="Avatar"/>
+                                                        <img src="@yield('url')images/avatar/{{session('name')[0]}}" alt="Avatar"/>
                                                     </a>
                                                 </div>
                                                 <div class="content">
@@ -106,29 +106,8 @@
 
 
     </script> -->
-
-
-
     <script>
-        function readURL(input, idIMG) { 
-            if (input.files && input.files[0]) { 
-            var reader = new FileReader(); 
-            reader.onload = function(e) { 
-                $(idIMG).attr('src', e.target.result); 
-            } 
-            reader.readAsDataURL(input.files[0]); 
-            }       
-        }   
 
-
-        //Tài khoản
-        $("#inp_Avatar").change(function() { 
-            readURL(this, "#img_Avatar"); 
-        });
-
-        $("#inp_Create_MonAn").change(function() { 
-            readURL(this, "#img_Create_MonAn"); 
-        });
         //Duyệt bình luận
         $('.binhluan_duyet_btn').click(function() {
             var trangthai = $(this).data('trangthai');
@@ -243,69 +222,64 @@
 
         //Tìm kiếm
         $(document).ready(function(){
-
             $('#country_name').keyup(function(){ //bắt sự kiện keyup khi người dùng gõ từ khóa tim kiếm
             var query = $(this).val(); //lấy gía trị ng dùng gõ
             if(query != '') //kiểm tra khác rỗng thì thực hiện đoạn lệnh bên dưới
-        {
-            var _token = $('input[name="_token"]').val(); // token để mã hóa dữ liệu
-             $.ajax({
-                url:"{{ route('search') }}", // đường dẫn khi gửi dữ liệu đi 'search' 
-                method:"POST", // phương thức gửi dữ liệu.
-                data:{query:query, _token:_token},
-                success:function(data){ //dữ liệu nhận về
-                $('#countryList').fadeIn();  
-                $('#countryList').html(data); //nhận dữ liệu dạng html và gán vào cặp thẻ có id là countryList
+            {
+                var _token = $('input[name="_token"]').val(); // token để mã hóa dữ liệu
+                $.ajax({
+                    url:"{{ route('search') }}", // đường dẫn khi gửi dữ liệu đi 'search' 
+                    method:"POST", // phương thức gửi dữ liệu.
+                    data:{query:query, _token:_token},
+                    success:function(data){ //dữ liệu nhận về
+                    $('#countryList').fadeIn();  
+                    $('#countryList').html(data); //nhận dữ liệu dạng html và gán vào cặp thẻ có id là countryList
+                    }
+                });
             }
         });
-        }
-    });
 
-        $(document).on('click', 'li', function(){  
-            $('#country_name').val($(this).text());  
-            $('#countryList').fadeOut();  
-        });  
+            $(document).on('click', 'li', function(){  
+                $('#country_name').val($(this).text());  
+                $('#countryList').fadeOut();  
+            });  
 
-    });
+        });
+    </script>
 
-        $("#inp_Buoc_1").change(function() { 
-            readURL(this, "#img_Buoc_1"); 
+    <script>
+        // preview hình ảnh trước khi upload
+        function readURL(input, idIMG) { 
+            if (input.files && input.files[0]) { 
+            var reader = new FileReader(); 
+            reader.onload = function(e) { 
+                $(idIMG).attr('src', e.target.result); 
+            } 
+            reader.readAsDataURL(input.files[0]); 
+            }       
+        }   
+
+        //Tài khoản
+        $("#inp_Avatar").change(function() { 
+            readURL(this, "#img_Avatar"); 
         });
 
-        $("#inp_Buoc_2").change(function() { 
-            readURL(this, "#img_Buoc_2"); 
-        });
+        $(".inputfile").off('click').change(function() { 
+            var data = $(this).data('id');
 
-        $("#inp_Buoc_3").change(function() { 
-            readURL(this, "#img_Buoc_3"); 
-        });
+            var img = data.split(" ")[0];
+            var inp = data.split(" ")[1];
 
-        $("#inp_Buoc_4").change(function() { 
-            readURL(this, "#img_Buoc_4"); 
-        });
-
-        $("#inp_Buoc_5").change(function() { 
-            readURL(this, "#img_Buoc_5"); 
-        });
-
-        $("#inp_Buoc_6").change(function() { 
-            readURL(this, "#img_Buoc_6"); 
-        });
-
-        $("#inp_Buoc_7").change(function() { 
-            readURL(this, "#img_Buoc_7"); 
-        });
-
-        $("#inp_Buoc_8").change(function() { 
-            readURL(this, "#img_Buoc_8"); 
-        });
-
-        $("#inp_Buoc_9").change(function() { 
-            readURL(this, "#img_Buoc_9"); 
-        });
-
-        $("#inp_Buoc_10").change(function() { 
-            readURL(this, "#img_Buoc_10"); 
+            var fileName = $(inp).val();
+            var idxDot = fileName.lastIndexOf(".") + 1;
+            var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+            if (extFile=="jpg" || extFile=="jpeg" || extFile=="png"){
+                readURL(this, img); 
+            }else{
+                alert("Chỉ cho phép hình ảnh");
+                $(inp).val(null);
+                $(img).attr('src', '../images/No-image.jpg');
+            }   
         });
     </script>
         
@@ -334,17 +308,69 @@
                     var img = '#img_Buoc_' + count;
 
                     $(inp).change(function() { 
-                        readURL(this, img); 
+                        var fileName = $(inp).val();
+                        var idxDot = fileName.lastIndexOf(".") + 1;
+                        var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+                        if (extFile=="jpg" || extFile=="jpeg" || extFile=="png"){
+                            readURL(this, img); 
+                        }else{
+                            alert("Chỉ cho phép hình ảnh");
+                            $(inp).val(null);
+                            $(img).attr('src', '../images/No-image.jpg');
+                        }   
+                        
                     });
                 }    
             });
         });
 
-        function Filter_MonAn(){
-            var filter = $('#fil_value').val();
-            alert(filter);
-        }
+        // lọc món ăn
+        $('#buttonFilter').on('click', function(){
+            var maloai = $('#select_filter').val();
+            
+            $.ajax({
+                url: 'http://localhost:8000/filter_monan',
+                type: 'GET',
+                cache: false,
+                data: {'maloai':maloai},
+                success: function(data){
+                    if(data == 'fail'){
+                        alert('fail');
+                        return;
+                    }
+                    $('#tbody_index').html(data);
+                    // ẩn modal
+                    $('#filter').modal('hide');
+                    // ẩn phân trang
+                    $('.pagination').prop('hidden', true);
+                }
+            });
+        });
 
+        // sắp xếp món ăn theo độ khó
+        $('.dokho').off('click').on('click', function(e){
+            e.preventDefault();
+            var dokho = $(this).data('id');
+            
+            $.ajax({
+                url: 'http://localhost:8000/sort_monan',
+                type: 'GET',
+                cache: false,
+                data: {'dokho':dokho},
+                success: function(data){
+                    if(data == 'fail'){
+                        alert('Sắp xếp thất bại');
+                        return;
+                    }
+
+                    $('#tbody_index').html(data);
+                    $('#sort').modal('hide');
+                    $('.pagination').prop('hidden', true);
+                }
+            });
+        });
+
+        // tìm kiếm món ăn
         $('#search_mon_an').keyup(function(){
             var queryString = $('#search_mon_an').val();
 

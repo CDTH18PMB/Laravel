@@ -51,7 +51,9 @@ class CTNAController extends Controller
                 <div id='div_buoc_$count' class='row' style='margin-bottom:25px'>
                     <div class='col-sm-4'>
                         <img src='../images/No-image.jpg' alt='Hình ảnh' id='img_Buoc_$count' style='width: 100%; height: 240px'>
-                        <span class='btn btn-outline-dark btn-file'>Đổi hình<input type='file' name='inp_Buoc_$count' id='inp_Buoc_$count'></span>
+                        <span class='btn btn-outline-dark btn-file'>Đổi hình
+                            <input type='file' class='inputfile' data-id='#img_Buoc_$count #inp_Buoc_$count' name='inp_Buoc_$count' id='inp_Buoc_$count' accept='image/*' required>
+                        </span>
                     </div>
                     <div class='col-sm-8'>
                         <textarea id='Buoc_$count' name='Buoc_$count' cols='30' rows='11' class='form-control'></textarea>
@@ -284,9 +286,71 @@ class CTNAController extends Controller
         return redirect('/');
     }
 
-    public function filter_monan()
+    // ajax lọc món ăn
+    public function filter_monan(Request $request)
     {
+        $maloai = $request->maloai;
+        $select = MonAn::where('LoaiMon', $maloai)->get();
 
+        $str = '';
+
+        if(count($select) == 0){
+            return 'fail';
+        }
+
+        foreach($select as $item){
+            $str.="
+                <tr class='size-12'>
+                    <td style='padding:70px 0'>$item->MaMon</td>
+                    <td style='padding:70px 0'>$item->TenMon</td>
+                    <td><img src='images/$item->TenMon/anhdaidien.jpg' alt='image' style='width:250px; height:150px'></td>
+                    <td style='padding:70px 0'>$item->DoKho</td>
+                    <td style='padding:70px 0'>$item->ThoiGianNau</td>
+                    <td style='padding:70px 0'>$item->NguoiTao</td>
+                    <td style='padding:70px 0'>
+                        $item->TrangThai
+                    </td>
+                    <td style='padding:60px 0'><a href='MonAn/$item->MaMon'><button class='btn btn-info'>Chi tiết</button></a></td>
+                </tr>
+            ";
+        }
+
+        return $str;
+    }
+
+    public function sort_monan(Request $request){
+        $dokho = $request->dokho;
+
+        if($dokho == ''){
+            return 'fail';
+        }
+
+        $select = MonAn::where('DoKho', 'like', '%'.$dokho.'%')->get();
+        
+        if(count($select) == 0){
+            return 'fail';
+        }
+
+        $str = '';
+
+        foreach($select as $item){
+            $str.="
+                <tr class='size-12'>
+                    <td style='padding:70px 0'>$item->MaMon</td>
+                    <td style='padding:70px 0'>$item->TenMon</td>
+                    <td><img src='images/$item->TenMon/anhdaidien.jpg' alt='image' style='width:250px; height:150px'></td>
+                    <td style='padding:70px 0'>$item->DoKho</td>
+                    <td style='padding:70px 0'>$item->ThoiGianNau</td>
+                    <td style='padding:70px 0'>$item->NguoiTao</td>
+                    <td style='padding:70px 0'>
+                        $item->TrangThai
+                    </td>
+                    <td style='padding:60px 0'><a href='MonAn/$item->MaMon'><button class='btn btn-info'>Chi tiết</button></a></td>
+                </tr>
+            ";
+        }
+
+        return $str;
     }
 
     public function search_monan(Request $request)

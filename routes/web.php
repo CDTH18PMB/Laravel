@@ -83,6 +83,8 @@ Route::group(['prefix'=>'/', 'middleware'=>'CheckLogin'], function(){
     //====================================== Lọc + Sắp xếp ========================================
 
     Route::get('/filter_monan', 'CTNAController@filter_monan')->name('CTNA.filter_monan');
+
+    Route::get('/sort_monan', 'CTNAController@sort_monan')->name('CTNA.sort_monan');
     
     //======================================== TÌM KIẾM ===============================================
    

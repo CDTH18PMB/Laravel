@@ -11,11 +11,12 @@ class TaiKhoan extends Seeder
      */
     public function run()
     {
+        $pass = bcrypt(123);
         $data = [
             [
                 'username'=>'HoangLam',
-                'anhdaidien'=>'hinhanh.jpg',
-                'password'=>bcrypt('123'),
+                'anhdaidien'=>'HoangLam.jpg',
+                'password'=>$pass,
                 'hoten'=>'Vũ Hoàng Lâm',
                 'sdt'=>'0123456789',
                 'email'=>'lam@gmail.com',
@@ -24,33 +25,33 @@ class TaiKhoan extends Seeder
             ],
             [
                 'username'=>'KieuNga',
-                'anhdaidien'=>'hinhanh.jpg',
-                'password'=>bcrypt('123'),
+                'anhdaidien'=>'KieuNga.jpg',
+                'password'=>$pass,
                 'hoten'=>'Nguyễn Thị Kiều Nga',
                 'sdt'=>'0123456789',
                 'email'=>'nga@gmail.com',
                 'loaitk'=>'User',
-                'trangthai'=>0
+                'trangthai'=>1
             ],
             [
                 'username'=>'DaiNhan',
-                'anhdaidien'=>'hinhanh.jpg',
-                'password'=>bcrypt('123'),
+                'anhdaidien'=>'DaiNhan.jpg',
+                'password'=>$pass,
                 'hoten'=>'Nguyễn Võ Đại Nhân',
                 'sdt'=>'0123456789',
                 'email'=>'nhan@gmail.com',
                 'loaitk'=>'User',
-                'trangthai'=>0
+                'trangthai'=>1
             ],
             [
                 'username'=>'MinhLuan',
-                'anhdaidien'=>'hinhanh.jpg',
-                'password'=>bcrypt('123'),
+                'anhdaidien'=>'MinhLuan.jpg',
+                'password'=>$pass,
                 'hoten'=>'Lê Minh Luân',
                 'sdt'=>'0123456789',
                 'email'=>'luan@gmail.com',
                 'loaitk'=>'User',
-                'trangthai'=>0
+                'trangthai'=>1
             ],
         ];
         

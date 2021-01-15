@@ -17,11 +17,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-//======================================== Login ======================================================
+//======================================== Login + Logout======================================================
 
 Route::post('/CheckLogin', 'APIController@CheckLogin');
 
-Route::post('/CheckLoginEXP', 'APIController@CheckLoginEXP');
+Route::get('/Logout', 'APIController@Logout');
+
+//======================================== SignUp =================================================
+
+Route::post('/SignUp', 'APIController@SignUp');
 
 //======================================================================================
 Route::get('/MonAn', 'APIController@index')->name('API.MonAn');
@@ -39,6 +43,12 @@ Route::post('/Create_HuongDan', 'APIController@Create_HuongDan');
 Route::get('/MonAn/{id}', 'APIController@ChiTietMonAn');
 
 Route::get('/HuongDan/{id}', 'APIController@HuongDan'); 
+
+//=================================== Update ===================================================
+
+Route::post('/Update_TaiKhoan', 'APIController@Update_TaiKhoan');
+
+Route::post('/Update_TaiKhoan_AnhDaiDien', 'APIController@Update_TaiKhoan_AnhDaiDien');
 
 // Route::get('/TaiKhoan','CTNAController@APITaiKhoan')->name('API.TaiKhoan');
 // Route::get('/TaiKhoan/{id}','CTNAController@store_apitaikhoan')->name('API1.TaiKhoan');

@@ -14,13 +14,17 @@
                     <div class='col-sm-6'>
                         <div class='form-group'>
                             <label for="TenMon">Tên món</label>
-                            <input type="text" class='form-control' name='TenMon'>
+                            <input type="text" class='form-control' name='TenMon' required>
                         </div>
                     </div>
                     <div class='col-sm-6'>
                     <div class='form-group'>
                             <label for="DoKho">Độ khó</label>
-                            <input type="text" class='form-control' name='DoKho'>
+                            <select class='form-control' name="DoKho" id="DoKho">
+                                <option value="Dễ">Dễ</option>
+                                <option value="Trung bình">Trung bình</option>
+                                <option value="Dễ">Khó</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -28,7 +32,7 @@
                     <div class='col-sm-6'>
                         <div class='form-group'>
                             <label for="ThoiGianNau">Thời gian nấu</label>
-                            <input type="text" class='form-control' name='ThoiGianNau'>
+                            <input type="text" class='form-control' name='ThoiGianNau' required>
                         </div>
                     </div>
                     <div class='col-sm-6'>
@@ -46,13 +50,13 @@
                     <div class='col-sm-6'>
                         <div class='form-group'>
                             <label for="MoTa">Mô tả</label>
-                            <textarea name="MoTa" rows="4" class='form-control'></textarea>
+                            <textarea name="MoTa" rows="4" class='form-control' required></textarea>
                         </div>
                     </div>
                     <div class='col-sm-6'>
                         <div class='form-group'>
                             <label for="NguyenLieu">Nguyên liệu</label>
-                            <textarea name="NguyenLieu" rows="4" class='form-control'></textarea>
+                            <textarea name="NguyenLieu" rows="4" class='form-control' required></textarea>
                         </div>
                     </div>
                 </div>       
@@ -62,7 +66,7 @@
                     <label for="img_Create_MonAn">Ảnh đại diện</label>
                     <img src="../images/No-image.jpg" alt="Ảnh đại diện" id='img_Create_MonAn' name='img_Create_MonAn' style='width: 100%; height: 250px'>
                     <span class='btn btn-outline-dark btn-file'>
-                        <input type="file" class='form-control' name='inp_Create_MonAn' id='inp_Create_MonAn'>Chọn hình
+                        <input type="file" class='inputfile' data-id='#img_Create_MonAn #inp_Create_MonAn' name='inp_Create_MonAn' id='inp_Create_MonAn' accept="image/*" required>Chọn hình
                     </span>
                 </div>                    
             </div>
@@ -77,10 +81,10 @@
             <div id='div_buoc_1' class='row' style='margin-bottom:25px'>
                 <div class='col-sm-4'>
                     <img src="../images/No-image.jpg" alt="hình ảnh" id='img_Buoc_1' style='width: 100%; height: 240px'>
-                    <span class='btn btn-outline-dark btn-file'>Đổi hình<input type='file' id="inp_Buoc_1" name='inp_Buoc_1'></span>
+                    <span class='btn btn-outline-dark btn-file'>Đổi hình<input type='file' class='inputfile' data-id='#img_Buoc_1 #inp_Buoc_1' id="inp_Buoc_1" name='inp_Buoc_1' accept="image/*" required></span>
                 </div>
                 <div class='col-sm-8'>
-                    <textarea id='Buoc_1' name='Buoc_1' cols="30" rows="11" class='form-control'></textarea>
+                    <textarea id='Buoc_1' name='Buoc_1' cols="30" rows="11" class='form-control' required></textarea>
                 </div>
             </div> 
         </div>
