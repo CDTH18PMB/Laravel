@@ -34,6 +34,12 @@ Route::get('/MonAn/{id}', 'APIController@ChiTietMonAn');
 
 Route::get('/HuongDan/{id}', 'APIController@HuongDan'); 
 
+Route::post('/Create_BinhLuan/{id}','APIController@Create_BinhLuan');
+ 
+Route::get('/BinhLuan/{id}', 'APIController@BinhLuan'); 
+
+Route::get('/TimTen','APIController@TimTen');
+
 // Route::get('/TaiKhoan','CTNAController@APITaiKhoan')->name('API.TaiKhoan');
 // Route::get('/TaiKhoan/{id}','CTNAController@store_apitaikhoan')->name('API1.TaiKhoan');
 

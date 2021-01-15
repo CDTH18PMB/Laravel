@@ -37,17 +37,50 @@ class APIController extends Controller
         $dsTaiKhoan = ['TaiKhoan'=>TaiKhoan::all()];
         return response()->json($dsTaiKhoan);
     }
+    //API Tìm Món Ăn Theo Tên
+    public function TimTen(Request $request){
+        $queryString = $request->queryString;
+        $dsMonAn = MonAn::where('TenMon','LIKE', '%'.$queryString.'%' )->get();
+        return response()->json($dsMonAn);
+
+    }
 
     public function ChiTietMonAn($id)
     {
         $dsMonAn = MonAn::where('MaMon', $id)->get();
         return response()->json($dsMonAn);
     }
-
+    
     public function HuongDan($id)
     {
         $HuongDan = HuongDan::where('MaMon', $id)->get();
         return response()->json($HuongDan);
+    }
+    //API Bình luận
+    public function BinhLuan($id)
+    {
+        $binhluan = BinhLuan::where('MaMon', $id)->get();
+        return response()->json($binhluan);
+    }
+    //API tạo bình luận
+    public function Create_BinhLuan($id){
+        $mamon = $_POST['MaMon'];
+        $tenmon = $_POST['TenMon'];
+        $username = $_POST['Username'];
+        $noidung = $_POST['NoiDung'];
+        $trangthai = 0;
+
+        $data = [
+            'MaMon'=>$mamon,
+            'TenMon'=>$tenmon,
+            'Username'=>$username,
+            'NoiDung'=>$noidung,
+            'TrangThai'=>$trangthai,
+        ];
+        $insert = BinhLuan::create($data);
+
+        $binhluan = BinhLuan::where('MaMon', $mamon)->get();
+        return response()->json($binhluan);
     }
     //==================================================================================================
 
