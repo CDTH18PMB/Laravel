@@ -25,5 +25,5 @@ class MonAn extends Model
 
     public function BinhLuan(){
        return $this->hasMany('App\BinhLuan');
-                            } 
+    } 
 }

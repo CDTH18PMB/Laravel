@@ -49,12 +49,12 @@ Author URL: http://w3layouts.com
                                 <div class="form-row">
                                     <span class="fas fa-user"></span>
                                     <label class="form-label" for="input">Name</label>
-                                    <input type="text" class="form-text" name='username'>
+                                    <input type="text" class="form-text" name='username' required>
                                 </div>
                                 <div class="form-row">
                                     <span class="fas fa-eye"></span>
                                     <label class="form-label" for="input">Password</label>
-                                    <input type="password" class="form-text" name='password'>
+                                    <input type="password" class="form-text" name='password' required>
                                 </div>
                                 <div class="form-row button-login">
                                     <button type='submit' class="btn btn-login">Login <span

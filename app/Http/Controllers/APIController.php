@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use Auth;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Storage;
 
 use App\MonAn;
@@ -16,11 +17,9 @@ use App\BinhLuan;
 
 class APIController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    use AuthenticatesUsers;
+
+    //============================================ GET API ====================================================
     public function index()
     {
         $dsMonAn = MonAn::all();
@@ -29,7 +28,7 @@ class APIController extends Controller
 
     public function DanhMuc()
     {
-        $dsDanhMuc = ['DanhMuc'=>DanhMuc::all()];
+        $dsDanhMuc = DanhMuc::all();
         return response()->json($dsDanhMuc);
     }
 
@@ -57,31 +56,130 @@ class APIController extends Controller
         $HuongDan = HuongDan::where('MaMon', $id)->get();
         return response()->json($HuongDan);
     }
+
+    //=========================================== Món ăn =============================================
+
+    public function APIMonAnTheoTenLoai(Request $request)
+    {
+     
+        $MaLoai=array();
+        $dm=DanhMuc::where('TenLoai','like','%'.$request->TenLoai.'%')->get();
+        for($i=0;$i<count($dm);$i++){
+            array_push($MaLoai,$dm[$i]->MaLoai);//them het id vao mang 
+        }
+       
+        $dsMonAn = MonAn::whereIn('LoaiMon',$MaLoai)->get();//lay ra tat ca cac phan tu thuoc id cua mang
+        return response()->json($dsMonAn);
+    }
+
+    public function APIMonAnTheoTenMon(Request $request)
+    {
+        $dsMonAn =MonAn::where('TenMon','like','%'.$request->TenMon.'%')->get();
+        return response()->json($dsMonAn);
+    }
+
+    public function APIMonAnHienThiTopTrending(Request $request)
+    {
+        $dsMonAn = MonAn::where('TenMon','like','%'.$request->TenMon.'%')
+        ->orderBy('LuotXem', 'desc')
+        ->take(5)
+        ->get();
+        return response()->json($dsMonAn);
+    }
+    
+    public function APIMonAnGoiY(Request $request)
+    {  
+        $dm=DanhMuc::inRanDomOrder()
+        ->take(1)->get();
+
+        return response()->json($dm);
+    }
+
+    // thêm món ăn vào Món đã thích
+    public function AddFavorite(){
+        $username = $_POST['Username'];
+        $mamon = $_POST['MaMon'];
+        $tenmon = $_POST['TenMon'];
+
+        $select = MonAnDaThich::where([['Username', '=', $username], ['MaMon', '=', $mamon]])->get();
+    
+        $data = [
+            'Username'=>$username,
+            'MaMon'=>$mamon,
+            'TenMon'=>$tenmon,
+        ];
+        
+        //$insert = MonAnDaThich::create($data);
+        $insert = DB::table('MonAnDaThich')->insert($data);
+
+        // cập nhật lượt thích
+        $monan = MonAn::where('MaMon', $mamon)->get();
+        $temp = $monan[0]->LuotThich;
+        $luotthich = $temp + 1;
+        $update = MonAn::where('MaMon', $mamon)->update(['LuotThich'=>$luotthich]);
+
+        return 'success';
+    }
+
+    public function UndoFavorite(){
+        $username = $_POST['Username'];
+        $mamon = $_POST['MaMon'];
+        $tenmon = $_POST['TenMon'];
+        
+        $insert = DB::table('MonAnDaThich')->where([['Username', '=', $username], ['MaMon', '=', $mamon]])->delete();
+
+        // cập nhật lượt thích
+        $monan = MonAn::where('MaMon', $mamon)->get();
+        $temp = $monan[0]->LuotThich;
+        $luotthich = $temp - 1;
+        $update = MonAn::where('MaMon', $mamon)->update(['LuotThich'=>$luotthich]);
+
+        return 'success';
+    }
+
+    public function KiemTraMonDaThich(){
+        $username = $_POST['Username'];
+        $mamon = $_POST['MaMon'];
+
+        $select = MonAnDaThich::where('Username', $username)->where('MaMon', $mamon)->get();
+
+        // nếu như món ăn đã tồn tại
+        if(count($select) > 0){
+            $remove = MonAnDaThich::where('Username', $username)->where('MaMon', $mamon)->delete();
+            return 'exists';
+        }
+        return 'notexists';
+    }
+
+    //========================================= Login + Logout==============================================
     //API Bình luận
     public function BinhLuan($id)
     {
-        $binhluan = BinhLuan::where('MaMon', $id)->get();
+        $binhluan = BinhLuan::where('MaMon', $id)->where('TrangThai', 1)->get();
+        if(count($binhluan) == 0){
+            return 'fail';
+        }
+
         return response()->json($binhluan);
     }
+
     //API tạo bình luận
-    public function Create_BinhLuan($id){
+    public function Create_BinhLuan(){
         $mamon = $_POST['MaMon'];
-        $tenmon = $_POST['TenMon'];
         $username = $_POST['Username'];
         $noidung = $_POST['NoiDung'];
         $trangthai = 0;
-
+        
         $data = [
             'MaMon'=>$mamon,
-            'TenMon'=>$tenmon,
             'Username'=>$username,
             'NoiDung'=>$noidung,
             'TrangThai'=>$trangthai,
         ];
+
         $insert = BinhLuan::create($data);
 
-        $binhluan = BinhLuan::where('MaMon', $mamon)->get();
-        return response()->json($binhluan);
+        return 'success';
     }
     //==================================================================================================
 
@@ -93,14 +191,48 @@ class APIController extends Controller
         $data = ['username'=>$username, 'password'=>$password, 'TrangThai'=>1];
         if(Auth::attempt($data))
         {
-            $dsTaiKhoan = ['TaiKhoan'=>TaiKhoan::where('username', $username)->get()];
+            $dsTaiKhoan = TaiKhoan::where('username', $username)->get();
             return response()->json($dsTaiKhoan);
         }
-        else
-        {
-            return 'false';
+        return 'fail';
+    }
+
+    public function Logout(){
+        Auth::logout();
+        return 'success';
+    }
+
+    //=========================================== SignUp ==============================================
+    public function SignUp(){
+        $dataAccount = $_POST['Account'];
+        $json = json_decode($dataAccount);
+
+        $username = $json->Username;
+        
+        $taikhoan = TaiKhoan::where('username', $username)->get();
+
+        if(count($taikhoan) == 0){
+    
+            $data = [
+                'username'=>$json->AnhDaiDien,
+                'AnhDaiDien'=>$json->AnhDaiDien,
+                'password'=>bcrypt($json->Password),
+                'HoTen'=>$json->HoTen,
+                'SDT'=>$json->SDT,
+                'Email'=>$json->Email,
+                'LoaiTK'=>$json->LoaiTK,
+                'TrangThai'=>$json->TrangThai,
+            ];
+            
+            $insert = DB::table('TaiKhoan')->insert($data);
+    
+            return 'success';
+        } else{
+            return 'exists';
         }
     }
+
+    //=====================================================================================================
 
     // api tạo công thức mới
     public function Create_MonAn()
@@ -179,7 +311,37 @@ class APIController extends Controller
         return 'success';
     }
     
-    //====================================================================================================
+    //======================================= Update ======================================================
+
+    // cập nhật thông tin tài khoản
+    public function Update_TaiKhoan(){
+        $username = $_POST['Username'];
+
+        $data = [
+            'HoTen'=>$_POST['HoTen'],
+            'SDT'=>$_POST['SDT'],
+            'Email'=>$_POST['Email'],
+        ];
+
+        $update = TaiKhoan::where('username', $username)->update($data);
+        return 'success';
+    }
+
+    // cập nhật ảnh đại diện tài khoản
+    public function Update_TaiKhoan_AnhDaiDien(){
+        $username = $_POST['Username'];
+        $encodeImage = $_POST['encodeImage'];
+
+        $url = 'images/avatar/'.$username.'.jpg';
+
+        $encodeImage = str_replace('data:image/jpg;base64,', '', $encodeImage);
+        $encodeImage = str_replace(' ', '+', $encodeImage);
+        $data = base64_decode($encodeImage);
+        
+        Storage::put($url, $data);
+
+        return 'success';
+    }
         // public function APITaiKhoan(){
     //     $dsTaiKhoan = TaiKhoan::all();//lấy all dữ liệu trong model
     //     return response()->json($dsTaiKhoan);
@@ -255,30 +417,6 @@ class APIController extends Controller
         $TaiKhoan   = TaiKhoan::where('username', $username)->get();
         return response()->json($TaiKhoan);
         // return TaiKhoanResource::collection($TaiKhoan);
-    }
-    //  cập nhật
-    public function update_taikhoan(Request $request, $username)
-    {
-        if($request->password == ""){
-            TaiKhoan::where('username',$username)->update([
-                'username'  => $request->username,
-                'AnhDaiDien'=> $request->AnhDaiDien,
-                'HoTen'     => $request->HoTen,
-                'SDT'       => $request->SDT,
-                'Email'     => $request->Email,
-            ]);}
-        else{
-            TaiKhoan::where('username',$username)->update([
-                'username'  => $request->username,
-                'AnhDaiDien'=>$request->AnhDaiDien,
-                'password'  =>  bcrypt($request->password),
-                'HoTen'     => $request->HoTen,
-                'SDT'       => $request->SDT,
-                'Email'     => $request->Email,
-            ]);}
-        $taikhoan = TaiKhoan::where('username',$username)->get();
-        return response()->json($TaiKhoan);
-        // return TaikhoanResource::collection($taikhoan);
     }
     // xoá TK
     public function delete_taikhoan($username)

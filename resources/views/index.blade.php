@@ -5,6 +5,7 @@
 @section('content')
 
 <div class='row' style='margin: 0 20px 10px 20px'>
+    <!-- Thông báo -->
     @if(session('create_success')) <!--thêm món ăn thành công-->
     <div class="alert alert-success alert-dismissible">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -26,6 +27,7 @@
     </div>
     @endif
 
+    <!-- Các nút chức năng -->
     <div class='col-sm-4'>
         <!-- Thêm mới -->
         <a href="{{route('CTNA.create_monan')}}"><button class='btn btn-primary' style='margin-right:5px'>Thêm</button></a>
@@ -35,44 +37,80 @@
         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#sort" style='margin-right:5px'>Sắp xếp</button>
     </div>
     
+    <!-- Tìm kiếm -->
     <div class='col-sm-8'>
         <!-- tìm kiếm -->
         <input type="text" class='form-control' placeholder='Tìm món ăn' style='width:100%;' id='search_mon_an'>
         <div id='SearchResult'></div>
     </div>
     
-
-
     <!-- modal bộ lọc -->
     <div class="modal fade" id="filter">
-    <div class="modal-dialog">
-        <div class="modal-content">
-        <form name="FilterForm">
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title">BỘ LỌC</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">BỘ LỌC</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
 
-            <!-- Modal body -->
-            <div class="modal-body">
-                <div class=form-group>
-                    <label for="filter">Loại món</label>
-                    <select class='form-control' name="filter" id="filter">
-                        @foreach($dsDanhMuc as $ds)
-                        <option value="{{$ds->MaLoai}}">{{$ds->TenLoai}}</option>
-                        @endforeach
-                    </select>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class=form-group>
+                        <label for="filter">Loại món</label>
+                        <select class='form-control' id="select_filter">
+                            @foreach($dsDanhMuc as $ds)
+                            <option value="{{$ds->MaLoai}}">{{$ds->TenLoai}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button id='buttonFilter' type='button' class='btn btn-success'>Lọc</button>
                 </div>
             </div>
-
-            <!-- Modal footer -->
-            <div class="modal-footer">
-                <button type='button' class='btn btn-success'>Lọc</button>
-            </div>
-        </form>
         </div>
     </div>
+
+    <!-- modal sắp xếp -->
+    <div class="modal fade" id="sort">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">SẮP XẾP</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class=form-group>
+                        <span>Độ khó</span><br><br>
+
+                        <div class='row'>
+                            <div class='col-sm-4'>
+                                <button data-id='De' type='button' class='btn btn-outline-primary dokho' style='width:100%'>Dễ</button>    
+                            </div>
+
+                            <div class='col-sm-4'>
+                                <button data-id='Trung Binh' type='button' class='btn btn-outline-warning dokho' style='width:100%'>Trung bình</button>    
+                            </div>
+
+                            <div class='col-sm-4'>
+                                <button data-id='Kho' type='button' class='btn btn-outline-danger dokho' style='width:100%'>Khó</button>
+                            </div>
+                        </div>               
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -90,9 +128,8 @@
                 <th>Ghi chú</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id='tbody_index'>
             @foreach($dsMonAn as $monan)
-
             <tr class='size-12'>
                 <td style='padding:70px 0'>{{$monan->MaMon}}</td>
                 <td style='padding:70px 0'>{{$monan->TenMon}}</td>
@@ -111,7 +148,8 @@
         </tbody>
     </table>
 
-    <div class='col-12 d-flex justify-content-center' style='margin-top:20px'>
+    <!-- phân trang -->
+    <div id='PhanTrangMonAn' class='col-12 d-flex justify-content-center' style='margin-top:20px'>
     {{$dsMonAn->links()}}
     </div>
     
