@@ -34,8 +34,6 @@ Route::get('/DanhMuc', 'APIController@DanhMuc')->name('API.DanhMuc');
 
 Route::get('/TaiKhoan', 'APIController@TaiKhoan')->name('API.TaiKhoan');
 
-
-
 Route::post('/Create_MonAn', 'APIController@Create_MonAn');
 
 Route::post('/Create_HuongDan', 'APIController@Create_HuongDan');
@@ -49,21 +47,30 @@ Route::get('/HuongDan/{id}', 'APIController@HuongDan');
 Route::post('/Update_TaiKhoan', 'APIController@Update_TaiKhoan');
 
 Route::post('/Update_TaiKhoan_AnhDaiDien', 'APIController@Update_TaiKhoan_AnhDaiDien');
-Route::post('/Create_BinhLuan/{id}','APIController@Create_BinhLuan');
+
+Route::post('/Create_BinhLuan','APIController@Create_BinhLuan');
  
 Route::get('/BinhLuan/{id}', 'APIController@BinhLuan'); 
 
 Route::get('/TimTen','APIController@TimTen');
 
-// Route::get('/TaiKhoan','CTNAController@APITaiKhoan')->name('API.TaiKhoan');
-// Route::get('/TaiKhoan/{id}','CTNAController@store_apitaikhoan')->name('API1.TaiKhoan');
+//=========================================== Món ăn =============================================
 
-// Route::post('/TaiKhoan1','CTNAController@APITaiKhoan1')->name('API2.TaiKhoan');
+Route::get('/MonAn1', 'APIController@APIMonAnTheoTenLoai')->name('API.MonAn');
 
-// Route::get('/MonAn','CTNAController@APIMonAn')->name('API.MonAn');
+Route::get('/MonAn2', 'APIController@APIMonAnTheoTenMon')->name('API.MonAn');
 
-//Route::get('/DanhMuc','CTNAController@APIDanhMuc')->name('API.DanhMuc');
-//Route::get('/DanhMuc1/{id}','CTNAController@store')->name('store.DanhMuc');
+Route::get('/MonAn3', 'APIController@APIMonAnHienThiTopTrending')->name('API.MonAn');
+
+Route::get('/MonAn4', 'APIController@APIMonAnGoiY')->name('API.MonAn');
+
+Route::get('/DanhMuc', 'APIController@DanhMuc')->name('API.DanhMuc');
+
+Route::post('/AddFavorite', 'APIController@AddFavorite');
+
+Route::post('/UndoFavorite', 'APIController@UndoFavorite');
+
+Route::post('/KiemTraMonDaThich', 'APIController@KiemTraMonDaThich');
 
 //=========================================== Tài Khoản ===========================================
 //danh sách TK

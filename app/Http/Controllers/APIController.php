@@ -28,7 +28,7 @@ class APIController extends Controller
 
     public function DanhMuc()
     {
-        $dsDanhMuc = ['DanhMuc'=>DanhMuc::all()];
+        $dsDanhMuc = DanhMuc::all();
         return response()->json($dsDanhMuc);
     }
 
@@ -57,32 +57,129 @@ class APIController extends Controller
         return response()->json($HuongDan);
     }
 
+    //=========================================== Món ăn =============================================
+
+    public function APIMonAnTheoTenLoai(Request $request)
+    {
+     
+        $MaLoai=array();
+        $dm=DanhMuc::where('TenLoai','like','%'.$request->TenLoai.'%')->get();
+        for($i=0;$i<count($dm);$i++){
+            array_push($MaLoai,$dm[$i]->MaLoai);//them het id vao mang 
+        }
+       
+        $dsMonAn = MonAn::whereIn('LoaiMon',$MaLoai)->get();//lay ra tat ca cac phan tu thuoc id cua mang
+        return response()->json($dsMonAn);
+    }
+
+    public function APIMonAnTheoTenMon(Request $request)
+    {
+        $dsMonAn =MonAn::where('TenMon','like','%'.$request->TenMon.'%')->get();
+        return response()->json($dsMonAn);
+    }
+
+    public function APIMonAnHienThiTopTrending(Request $request)
+    {
+        $dsMonAn = MonAn::where('TenMon','like','%'.$request->TenMon.'%')
+        ->orderBy('LuotXem', 'desc')
+        ->take(5)
+        ->get();
+        return response()->json($dsMonAn);
+    }
+    
+    public function APIMonAnGoiY(Request $request)
+    {  
+        $dm=DanhMuc::inRanDomOrder()
+        ->take(1)->get();
+
+        return response()->json($dm);
+    }
+
+    // thêm món ăn vào Món đã thích
+    public function AddFavorite(){
+        $username = $_POST['Username'];
+        $mamon = $_POST['MaMon'];
+        $tenmon = $_POST['TenMon'];
+
+        $select = MonAnDaThich::where([['Username', '=', $username], ['MaMon', '=', $mamon]])->get();
+    
+        $data = [
+            'Username'=>$username,
+            'MaMon'=>$mamon,
+            'TenMon'=>$tenmon,
+        ];
+        
+        //$insert = MonAnDaThich::create($data);
+        $insert = DB::table('MonAnDaThich')->insert($data);
+
+        // cập nhật lượt thích
+        $monan = MonAn::where('MaMon', $mamon)->get();
+        $temp = $monan[0]->LuotThich;
+        $luotthich = $temp + 1;
+        $update = MonAn::where('MaMon', $mamon)->update(['LuotThich'=>$luotthich]);
+
+        return 'success';
+    }
+
+    public function UndoFavorite(){
+        $username = $_POST['Username'];
+        $mamon = $_POST['MaMon'];
+        $tenmon = $_POST['TenMon'];
+        
+        $insert = DB::table('MonAnDaThich')->where([['Username', '=', $username], ['MaMon', '=', $mamon]])->delete();
+
+        // cập nhật lượt thích
+        $monan = MonAn::where('MaMon', $mamon)->get();
+        $temp = $monan[0]->LuotThich;
+        $luotthich = $temp - 1;
+        $update = MonAn::where('MaMon', $mamon)->update(['LuotThich'=>$luotthich]);
+
+        return 'success';
+    }
+
+    public function KiemTraMonDaThich(){
+        $username = $_POST['Username'];
+        $mamon = $_POST['MaMon'];
+
+        $select = MonAnDaThich::where('Username', $username)->where('MaMon', $mamon)->get();
+
+        // nếu như món ăn đã tồn tại
+        if(count($select) > 0){
+            $remove = MonAnDaThich::where('Username', $username)->where('MaMon', $mamon)->delete();
+            return 'exists';
+        }
+        return 'notexists';
+    }
+
     //========================================= Login + Logout==============================================
     //API Bình luận
     public function BinhLuan($id)
     {
-        $binhluan = BinhLuan::where('MaMon', $id)->get();
+        $binhluan = BinhLuan::where('MaMon', $id)->where('TrangThai', 1)->get();
+        if(count($binhluan) == 0){
+            return 'fail';
+        }
+
         return response()->json($binhluan);
     }
+
     //API tạo bình luận
-    public function Create_BinhLuan($id){
+    public function Create_BinhLuan(){
         $mamon = $_POST['MaMon'];
-        $tenmon = $_POST['TenMon'];
         $username = $_POST['Username'];
         $noidung = $_POST['NoiDung'];
         $trangthai = 0;
-
+        
         $data = [
             'MaMon'=>$mamon,
-            'TenMon'=>$tenmon,
             'Username'=>$username,
             'NoiDung'=>$noidung,
             'TrangThai'=>$trangthai,
         ];
+
         $insert = BinhLuan::create($data);
 
-        $binhluan = BinhLuan::where('MaMon', $mamon)->get();
-        return response()->json($binhluan);
+        return 'success';
     }
     //==================================================================================================
 

@@ -264,6 +264,7 @@
             readURL(this, "#img_Avatar"); 
         });
 
+        // kiểm tra chỉ dược phép upload hình ảnh
         $(".inputfile").off('click').change(function() { 
             var data = $(this).data('id');
 
@@ -326,6 +327,7 @@
 
         // lọc món ăn
         $('#buttonFilter').on('click', function(){
+            // lấy mã loại
             var maloai = $('#select_filter').val();
             
             $.ajax({
@@ -335,9 +337,10 @@
                 data: {'maloai':maloai},
                 success: function(data){
                     if(data == 'fail'){
-                        alert('fail');
+                        alert('Lọc món ăn thất bại');
                         return;
                     }
+                    
                     $('#tbody_index').html(data);
                     // ẩn modal
                     $('#filter').modal('hide');

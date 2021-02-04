@@ -31,7 +31,7 @@
                     <div class='col-sm-4'>
                         <div class='form-group'>
                             <label for="TenMon">Tên món</label>
-                            <input type="text" class='form-control' name='TenMon' value='{{$chitiet->TenMon}}'>
+                            <input type="text" class='form-control' name='TenMon' value='{{$chitiet->TenMon}}' required>
                         </div>
                     </div>
                     <div class='col-sm-4'>
@@ -50,13 +50,18 @@
                     <div class='col-sm-6'>
                         <div class='form-group'>
                             <label for="DoKho">Độ khó</label>
-                            <input type="text" class='form-control' name='DoKho' value='{{$chitiet->DoKho}}'>
+                            <select name="DoKho" id="DoKho" class='form-control'>
+                                <option value="{{$chitiet->DoKho}}">{{$chitiet->DoKho}}</option>
+                                <option value="Dễ">Dễ</option>
+                                <option value="Trung bình">Trung bình</option>
+                                <option value="Khó">Khó</option>
+                            </select>
                         </div>
                     </div>                                
                     <div class='col-sm-6'>
                         <div class='form-group'>
                             <label for="ThoiGianNau">Thời gian nấu</label>
-                            <input type="text" class='form-control' name='ThoiGianNau' value='{{$chitiet->ThoiGianNau}}'>
+                            <input type="text" class='form-control' name='ThoiGianNau' value='{{$chitiet->ThoiGianNau}}' required>
                         </div>
                     </div>
                 </div>
@@ -64,13 +69,13 @@
                     <div class='col-sm-6'>
                         <div class='form-group'>
                             <label for="LuotXem">Lượt xem</label>
-                            <input type="number" class='form-control' min='0' name='LuotXem' value='{{$chitiet->LuotXem}}'>
+                            <input type="number" class='form-control' min='0' name='LuotXem' value='{{$chitiet->LuotXem}}' required>
                         </div>
                     </div>
                     <div class='col-sm-6'>
                         <div class='form-group'>
                             <label for="LuotThich">Lượt thích</label>
-                            <input type="number" class='form-control' min='0' name='LuotThich' value='{{$chitiet->LuotThich}}'>
+                            <input type="number" class='form-control' min='0' name='LuotThich' value='{{$chitiet->LuotThich}}' required>
                         </div>
                     </div>
                 </div>
@@ -95,8 +100,10 @@
             <div class='col-sm-4'>
                 <div class='form-group'>
                     <label for="AnhDaiDien">Ảnh đại diện</label>
-                    <img src="../images/{{$chitiet->TenMon}}/anhdaidien.jpg" alt="image" id='img_Create_MonAn' name='img_Create_MonAn' style='width: 100%; height: 250px'>
-                    <span class='btn btn-outline-dark btn-file'><input type="file" name='inp_Create_MonAn' id='inp_Create_MonAn' class='form-control'>Chọn hình</span>
+                        <img src="../images/{{$chitiet->TenMon}}/anhdaidien.jpg" alt="image" id='img_Create_MonAn' name='img_Create_MonAn' style='width: 100%; height: 250px'>
+                    <span class='btn btn-outline-dark btn-file'>
+                        <input type="file" class='inputfile' data-id='#img_Create_MonAn #inp_Create_MonAn' name='inp_Create_MonAn' id='inp_Create_MonAn' accept='image/*' required>Chọn hình
+                    </span>
                 </div>
             </div>
         </div>
@@ -125,10 +132,12 @@
             <div id='div_buoc_{{$i}}' class='row' style='margin-bottom:25px'>
                 <div class='col-sm-4'>
                     <img src="../images/{{$chitiet->TenMon}}/{{$dsHuongDan[$i-1]->HinhAnh}}" alt="hình ảnh" id='img_Buoc_{{$i}}' style='width: 100%; height: 240px'>
-                    <span class='btn btn-outline-dark btn-file'>Đổi hình<input type='file' id="inp_Buoc_{{$i}}" name='inp_Buoc_{{$i}}'></span>
+                    <span class='btn btn-outline-dark btn-file'>Đổi hình
+                        <input type='file' class='inputfile' data-id='#img_Buoc_{{$i}} #inp_Buoc_{{$i}}' id="inp_Buoc_{{$i}}" name='inp_Buoc_{{$i}}' required>
+                    </span>
                 </div>
                 <div class='col-sm-8'>
-                    <textarea id='Buoc_{{$i}}' name='Buoc_{{$i}}' cols="30" rows="11" class='form-control'>{{$dsHuongDan[$i-1]->CacBuocLam}}</textarea>
+                    <textarea id='Buoc_{{$i}}' name='Buoc_{{$i}}' cols="30" rows="11" class='form-control' required>{{$dsHuongDan[$i-1]->CacBuocLam}}</textarea>
                 </div> 
             </div>
         @endfor

@@ -11,7 +11,7 @@ class BinhLuan extends Model
     public $timestamps = false;
     
     protected $fillable = [
-        'MaMon','TenMon','Username','NoiDung','TrangThai'
+        'MaMon','Username','NoiDung','TrangThai'
     ];
     public function MonAn(){
         return $this->belongTo('App\MonAn','MaMon');

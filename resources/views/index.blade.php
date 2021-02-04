@@ -5,6 +5,7 @@
 @section('content')
 
 <div class='row' style='margin: 0 20px 10px 20px'>
+    <!-- Thông báo -->
     @if(session('create_success')) <!--thêm món ăn thành công-->
     <div class="alert alert-success alert-dismissible">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -26,6 +27,7 @@
     </div>
     @endif
 
+    <!-- Các nút chức năng -->
     <div class='col-sm-4'>
         <!-- Thêm mới -->
         <a href="{{route('CTNA.create_monan')}}"><button class='btn btn-primary' style='margin-right:5px'>Thêm</button></a>
@@ -35,14 +37,13 @@
         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#sort" style='margin-right:5px'>Sắp xếp</button>
     </div>
     
+    <!-- Tìm kiếm -->
     <div class='col-sm-8'>
         <!-- tìm kiếm -->
         <input type="text" class='form-control' placeholder='Tìm món ăn' style='width:100%;' id='search_mon_an'>
         <div id='SearchResult'></div>
     </div>
     
-
-
     <!-- modal bộ lọc -->
     <div class="modal fade" id="filter">
         <div class="modal-dialog">

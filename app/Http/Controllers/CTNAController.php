@@ -44,9 +44,7 @@ class CTNAController extends Controller
         if($request->ajax())
         {
             $count = $request->count;
-            $arr = $request->arr;
-            
-            
+
             $str = "
                 <div id='div_buoc_$count' class='row' style='margin-bottom:25px'>
                     <div class='col-sm-4'>
@@ -318,6 +316,7 @@ class CTNAController extends Controller
         return $str;
     }
 
+    // ajax sắp xếp món ăn
     public function sort_monan(Request $request){
         $dokho = $request->dokho;
 
@@ -353,6 +352,7 @@ class CTNAController extends Controller
         return $str;
     }
 
+    // ajax tìm kiếm món ăn
     public function search_monan(Request $request)
     {
         $queryString = $request->queryString;
@@ -438,7 +438,7 @@ class CTNAController extends Controller
     //Lấy dữ liệu bảng món ăn
     public function duyet()
     {
-        $dsDuyetCongThuc = MonAn::all();
+        $dsDuyetCongThuc = MonAn::where('TrangThai', 2)->get();
         return view('duyetcongthuc',['dsDuyetCongThuc'=>$dsDuyetCongThuc]);
     }
 

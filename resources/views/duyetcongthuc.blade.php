@@ -45,15 +45,15 @@
                     <div style='margin-bottom:3px'>
                         <a href="{{route('CTNA.show_monan', ['id'=>$duyetct->MaMon])}}" class='link_duyet'>Chi tiết</a>
                     </div>
-                    @if($duyetct->TrangThai == 0 )
+
                     <div style='margin-bottom:3px'>
-                    <input type="button" data-TrangThai="0" id="{{$duyetct->MaMon}}"  class="btn btn-primary  congthuc_duyet_btn" value="Duyệt" >
+                    <input type="button" data-TrangThai="2" id="{{$duyetct->MaMon}}"  class="btn btn-primary  congthuc_duyet_btn" value="Duyệt" >
                     </div>
-                    @else 
+
                     <div>
                     <input type="button" data-TrangThai="1" id="{{$duyetct->MaMon}}"  class="btn btn-danger congthuc_xoa_btn" value="Xoá" >
                     </div> 
-                    @endif
+
                 </td>
             </tr>
             @endforeach

@@ -28,7 +28,8 @@ class AuthLoginController extends Controller
         $data = [
             'username'=>$request->username,
             'password'=>$request->password,
-            //'LoaiTK'=>'Admin'
+            'LoaiTK'=>'Admin',
+            'TrangThai'=>1
         ];
 
         if(Auth::attempt($data))
